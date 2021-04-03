@@ -1,0 +1,17 @@
+CurrentState,KeyTyped,KeyCode,MouseEvent,ClickableName,MapDirection,NextState
+Hallway,,,,,E,Bob'sRoom
+Hallway,,,,,W,Earth'sRoom
+Hallway,,,,,N,LivingRoom
+Hallway,,,,,S,FrontYard
+FrontYard,,,,,N,Hallway
+Bob'sRoom,,,,,W,Hallway
+Earth'sRoom,,,,,E,Hallway
+LivingRoom,,,,,N,Kitchen
+LivingRoom,,,,,E,Mom'sRoom
+LivingRoom,,,,,S,Hallway
+LivingRoom,,,,,W,Bathroom
+Kitchen,,,,,E,Backyard
+Kitchen,,,,,S,LivingRoom
+Backyard,,,,,W,Kitchen
+Mom'sRoom,,,,,W,LivingRoom
+Bathroom,,,,,E,LivingRoom
