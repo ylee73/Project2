@@ -2,7 +2,7 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 0,Hallway,PNGRoom,assets/Hallway.png,
 1,FrontYard,PNGRoom,assets/FrontYardBefore.png,
 2,Bob'sRoom,PNGRoom,assets/Bob'sRoom.png,
-3,Earth'sRoom,PNGRoom,assets/Earth'sRoom.png,
+3,Earth'sRoom,PNGRoom,assets/EarthRoom.png,
 4,LivingRoom,PNGRoom,assets/LivingRoom.png,
 5,Kitchen,PNGRoom,assets/Kitchen.png,
 6,Backyard,PNGRoom,assets/BackyardRecycle.png,

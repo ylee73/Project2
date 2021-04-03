@@ -2,7 +2,8 @@
   Project2
   by Ashley Lee
 
-  Use the p5.play.js library to create an earth character that waves. 
+  Use the p5.play.js library to create a basic map of the game with 
+  moving playerSprite. 
 
 ------------------------------------------------------------------------------------
 	To use:
@@ -100,6 +101,7 @@ function moveSprite() {
 	}
 	else
 		playerSprite.velocity.x = 0; 
+
 
 	//move up and down
 	//going down
