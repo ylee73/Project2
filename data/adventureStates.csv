@@ -6,5 +6,5 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 4,LivingRoom,PNGRoom,assets/LivingRoom.png,
 5,Kitchen,PNGRoom,assets/Kitchen.png,
 6,Backyard,PNGRoom,assets/BackyardRecycle.png,
-7,Mom'sRoom,PNGRoom,assets/Mom'sRoom.png,
+7,Mom'sRoom,PNGRoom,assets/MomRoom.png,
 8,Bathroom,PNGRoom,assets/Bathroom.png,
