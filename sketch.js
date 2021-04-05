@@ -10,6 +10,9 @@
 	Add this line to the index.html
 
   <script src="p5.play.js"></script>
+  <script src="p5.2DAdventure.js"></script>
+  <script src="p5.clickable.js"></script>
+
 ***********************************************************************************/
 
 // adventure manager global  
