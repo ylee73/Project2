@@ -145,7 +145,7 @@ clickableButtonPressed = function() {
 
 //______________Subclasses_________________//
 class FrontYard extends PNGRoom {
-	constructor(){
+	constructor() {
 		super();
 
 		this.textBoxWidth = 645;
@@ -153,6 +153,7 @@ class FrontYard extends PNGRoom {
 
 		this.homeText = "Let's go back in";
 	}
+	
 	draw() {
 		super.draw();
 
