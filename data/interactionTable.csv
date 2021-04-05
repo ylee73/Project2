@@ -3,7 +3,7 @@ Hallway,,,,,E,Bob'sRoom
 Hallway,,,,,W,Earth'sRoom
 Hallway,,,,,N,LivingRoom
 Hallway,,,,,S,FrontYard
-FrontYard,,,,,N,Hallway
+FrontYard,,,,Home,,Hallway
 Bob'sRoom,,,,,W,Hallway
 Earth'sRoom,,,,,E,Hallway
 LivingRoom,,,,,N,Kitchen

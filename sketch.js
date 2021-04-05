@@ -22,8 +22,7 @@ var playerAnimation;
 //Clickables
 var clickablesManager; 
 var clickables; //array
-var clickableIndex = 0; //index for clickable
-
+var homeIndex = 0; //"home" clickable index 
 
 //load adventure manager with states and interacions tables
 function preload(){
@@ -39,7 +38,7 @@ function setup() {
   clickables = clickablesManager.setup();
 
   //create player sprite
-  playerSprite = createSprite(310, 160, 70, 70); 
+  playerSprite = createSprite(500, 160, 70, 70); 
 
   //add player sprite animation
   playerSprite.addAnimation('still', loadAnimation('assets/earth_frontback1.png'));
@@ -56,7 +55,7 @@ function setup() {
   adventureManager.setup();
 
   //call function to setup additional information about clickables
-  //setupClickables();
+  setupClickables();
  }
 
 function draw() {
@@ -99,13 +98,9 @@ function moveSprite() {
 		playerSprite.mirrorX(-1);
 		playerSprite.velocity.x = -4;
 	}
-	else
-		playerSprite.velocity.x = 0; 
-
-
 	//move up and down
 	//going down
-	if(keyIsDown(DOWN_ARROW)) {
+	else if(keyIsDown(DOWN_ARROW)) {
 		playerSprite.changeAnimation('upDown');
 		playerSprite.velocity.y = 4;
 	}
@@ -114,13 +109,14 @@ function moveSprite() {
 		playerSprite.changeAnimation('upDown');
 		playerSprite.velocity.y = -4;
 	}
-	else
+	else {
+		playerSprite.changeAnimation('still');
+		playerSprite.velocity.x = 0; 
 		playerSprite.velocity.y = 0; 
-
+	}
 }
 //_______________Clickables ___________//
-/*
-function setupClickabls() {
+function setupClickables() {
 	// All clickables to have same effects
   	for( let i = 0; i < clickables.length; i++ ) {
     	clickables[i].onHover = clickableButtonHover;
@@ -133,15 +129,39 @@ clickableButtonHover = function() {
 	this.color = "#72CC81";
   	this.noTint = false;
  	this.tint = "#7797e6";
-
+}
 //Light gray
  clickableButtonOnOutside = function () {
   // backto our gray color
-  this.color = "#AAAAAA";
+  this.color = "#ffffff";
 } 
 
 clickableButtonPressed = function() {
   //change state accordingly
-  adventureManager.clickablePressed(this.name); 
+  if (this.id === homeIndex) {
+  	adventureManager.clickablePressed(this.name); 
+  }
 }
-*/
+
+//______________Subclasses_________________//
+class FrontYard extends PNGRoom {
+	constructor(){
+		super();
+
+		this.textBoxWidth = 645;
+		this.textBoxHeight = 70;
+
+		this.homeText = "Let's go back in";
+	}
+	draw() {
+		super.draw();
+
+		//text draw setting
+		fill(255);
+		textAlign(CENTER);
+		textSize(25);
+
+		//draw text
+		text(this.homeText, 268, 590, this.textBoxWidth, this.textBoxHeight);
+	}
+}
