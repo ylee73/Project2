@@ -27,6 +27,17 @@ var clickablesManager;
 var clickables; //array
 var homeIndex = 0; //"home" clickable index 
 
+//Textbox
+var textBoxWidth = 645;
+var textBoxHeight = 70;
+
+//Chores varaibles
+var water = false;
+var checkBob = false;
+
+//Logistics varaibles
+var seeNote = false; //check if user saw mom's note
+
 //load adventure manager with states and interacions tables
 function preload(){
 	clickablesManager = new ClickableManager('data/clickableLayout.csv');
@@ -146,15 +157,28 @@ clickableButtonPressed = function() {
   }
 }
 
+function doorCollide() {
+	if (adventureManager.getStateName() == "Kitchen") {
+		adventureManager.changeState("LivingRoom");
+	}
+	else if (adventureManager.getStateName() == "LivingRoom") {
+		adventureManager.changeState("Hallway");
+	}
+	else if (adventureManager.getStateName() == "Hallway") {
+		adventureManager.changeState("FrontYardBefore");
+	}
+}
+
 //______________Subclasses_________________//
-class FrontYard extends PNGRoom {
-	constructor() {
-		super();
-
-		this.textBoxWidth = 645;
-		this.textBoxHeight = 70;
-
-		this.homeText = "Let's go back in";
+class FrontYardBefore extends PNGRoom {
+	preload() {
+		//chekc if water chore is done
+		if (water) {
+			this.homeText = "Let's go back in";
+		}
+		else {
+			this.homeText = "Okay… So I am out in the front yard to water the grass. But how should I water it? ";
+		}
 	}
 	
 	draw() {
@@ -162,10 +186,59 @@ class FrontYard extends PNGRoom {
 
 		//text draw setting
 		fill(255);
-		textAlign(CENTER);
 		textSize(25);
 
 		//draw text
-		text(this.homeText, 268, 590, this.textBoxWidth, this.textBoxHeight);
+		text(this.homeText, 268, 590, textBoxWidth, textBoxHeight);
+	}
+}
+class Kitchen extends PNGRoom {
+	preload() { 
+
+		//creat door sprite for collison
+	  	this.door = createSprite(320, 540, 20, 20);
+  		this.door.addAnimation('door', loadAnimation('assets/Door.png'));
+
+	}
+	draw() {
+		super.draw();
+		//draw door sprite
+		drawSprite(this.door);
+		//check for overlap with door and main character and switch to next state when collided
+		playerSprite.overlap(this.door,doorCollide);
+	}
+}
+
+class LivingRoom extends PNGRoom {
+	preload() { 
+
+		//creat door sprite for collison
+	  	this.door = createSprite(320, 540, 20, 20);
+  		this.door.addAnimation('door', loadAnimation('assets/Door.png'));
+
+	}
+	draw() {
+		super.draw();
+		//draw door sprite
+		drawSprite(this.door);
+		//check for overlap with door and main character and switch to next state when collided
+		playerSprite.overlap(this.door,doorCollide);
+	}
+}
+
+class Hallway extends PNGRoom {
+	preload() { 
+
+		//creat door sprite for collison
+	  	this.door = createSprite(320, 540, 20, 20);
+  		this.door.addAnimation('door', loadAnimation('assets/Door.png'));
+
+	}
+	draw() {
+		super.draw();
+		//draw door sprite
+		drawSprite(this.door);
+		//check for overlap with door and main character and switch to next state when collided
+		playerSprite.overlap(this.door,doorCollide);
 	}
 }
