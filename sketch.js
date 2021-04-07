@@ -99,11 +99,26 @@ function draw() {
   //draw clickables
   clickablesManager.draw();
 
-  //responds to keydowns
-  moveSprite();
+  //no playersprite for inroscreen, instructions, notes, frontyards, mirror, ac states
+  if (adventureManager.getStateName() !== "IntroScreen" &&
+  	adventureManager.getStateName() !== "Instructions" &&
+  	adventureManager.getStateName() !== "FrontYardBefore" &&
+  	adventureManager.getStateName() !== "FrontYardSprinkler" &&
+  	adventureManager.getStateName() !== "FrontYardHand" &&
+  	adventureManager.getStateName() !== "FrontYardWatered" &&
+  	adventureManager.getStateName() !== "FrontYardDirtyAfter" &&
+  	adventureManager.getStateName() !== "FrontYardDirtyBefore" &&
+  	adventureManager.getStateName() !== "MirrorDirty1" &&
+  	adventureManager.getStateName() !== "MirrorDirty2" &&
+  	adventureManager.getStateName() !== "MirrorClean" &&
+  	adventureManager.getStateName() !== "Note" &&
+  	adventureManager.getStateName() !== "AC") {
+  	//responds to keydowns
+  	moveSprite();
 
-  //draw sprite
-  drawSprite(playerSprite);
+ 	 //draw sprite
+	drawSprite(playerSprite);
+  }
 
   //record state 
   previousState = adventureManager.getStateName;
@@ -179,9 +194,17 @@ clickableButtonPressed = function() {
   }
   else if (this.id ===landfillIndex) {
   	adventureManager.clickablePressed(this.name);
+  	//reposition sprite
+  	playerSprite.position.x = 80;
+	playerSprite.position.y = 40;
+	//gets dirtier
+	dirtyLevel = dirtyLevel +1;
   }
   else if (this.id ===recycleIndex) {
   	adventureManager.clickablePressed(this.name);
+  	//reposition sprite
+  	playerSprite.position.x = 80;
+	playerSprite.position.y = 40;
   }
   else if (this.id ===startIndex) {
   	adventureManager.clickablePressed(this.name);
@@ -260,10 +283,18 @@ function noteRead() {
 //pick up box to do the chore
 function pickUp() {
 	print('collided');
-	text("Let's throw this away. But in which bin am I supposed to throw this in?", 2668, 590, textBoxWidth, textBoxHeight);
+	text("Let's throw this away. But in which bin am I supposed to throw this in?", 268, 590, textBoxWidth, textBoxHeight);
 	//turn clickables on
 	clickables[5].visible = true;
 	clickables[6].visible = true;
+}
+function recycleCollide() {
+	//trash chore completed
+	trash = true;
+}
+function landfillCollide() {
+	//trash chore completed
+	trash = true;
 }
 
 //______________Subclasses_________________//
@@ -328,7 +359,6 @@ class Kitchen extends PNGRoom {
 			drawSprite(this.box);
 			playerSprite.overlap(this.box, pickUp);
 		}
-
 	}
 }
 
@@ -421,5 +451,58 @@ class MomRoom extends PNGRoom {
 			text(this.earthTextAfter, 268, 590, textBoxWidth, textBoxHeight);
 		}
 		
+	}
+}
+class BackyardRecycle extends PNGRoom {
+	preload() { 
+		this.earthTextBefore = "Why does our backyard so complicated. But I got to find the recycle bin!"
+		this.earthTextAfter ="Yay! Into the Recycling bin it goes. Let's go back to the Kitchen."
+		//recycle bin sprite for collison
+	  	this.recycle = createSprite(830, 210, 67, 97);
+  		this.recycle.addAnimation('recycle', loadAnimation('assets/Recycle.png'));
+	}
+	draw() {
+		super.draw();
+
+		moveSprite();
+		//text draw setting
+		fill(255);
+		textSize(25);
+		if (trash) {
+			text(this.earthTextAfter, 268, 590, textBoxWidth, textBoxHeight);
+		}
+		else {
+			text(this.earthTextBefore, 268, 590, textBoxWidth, textBoxHeight);	
+		}
+		//draw recycle bin sprite
+		drawSprite(this.recycle);
+		//checkoverlap
+		playerSprite.overlap(this.recycle,recyclecCollide);
+	}
+}
+class BackyardLandfill extends PNGRoom {
+	preload() { 
+		this.earthTextBefore = "Why does our backyard so complicated. But I got to find the Landfill bin!"
+		this.earthTextAfter = "Into the Landfill bin it goes. Let's go back to the Kitchen."
+		//recycle bin sprite for collison
+	  	this.landfill = createSprite(830, 210, 67, 97);
+  		this.landfill.addAnimation('landfill', loadAnimation('assets/Landfill.png'));
+	}
+	draw() {
+		super.draw();
+
+		//text draw setting
+		fill(255);
+		textSize(25);
+		if (trash) {
+			text(this.earthTextAfter, 268, 590, textBoxWidth, textBoxHeight);
+		}
+		else {
+			text(this.earthTextBefore, 268, 590, textBoxWidth, textBoxHeight);	
+		}
+		//draw recycle bin sprite
+		drawSprite(this.landfill);
+		//checkoverlap
+		playerSprite.overlap(this.landfill,landfillCollide);
 	}
 }
