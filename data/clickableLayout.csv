@@ -1,2 +1,15 @@
-ID,Name,State,PNGFilename,Text,x,y,visable
-0,Home,FrontYard,,Home,1021,609,yes
+ID,Name,State,PNGFilename,Text,x,y,width,height
+0,Home,FrontYardBefore,,Home,1021,609,100,50
+1,Start,Instructions,,Start,539,625,100,50
+2,Instructions,IntroScreen,,Instructions,539,625,100,50
+3,Sprinkler,FrontYardBefore,assets/Sprinkler.png,,891,579,123,123
+4,HandSprinkler,FrontYardBefore,assets/HandSprinkler.png,,1051,579,123,123
+5,Recycle,Kitchen,,Recycle,1051,609,100,50
+6,Landfill,Kitchen,,Landfill,895,609,100,50
+7,NextS,FrontYardSprinkler,,Next,1021,609,100,50
+8,NextH,FrontYardHandSprinkler,,Next,1021,609,100,50
+9,Back,Note,,Back,1021,609,100,50
+10,Mirror,Bathroom,,Mirror,1021,609,100,50
+11,BackC,MirrorClean,,Back,1021,609,100,50
+12,BackD1,MirrorDirty1,,Back,1021,609,100,50
+13,BackD2,MirrorDirty2,,Back,1021,609,100,50
