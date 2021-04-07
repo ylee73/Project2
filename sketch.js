@@ -39,6 +39,7 @@ var mirrorIndex =10;
 var backCIndex =11;
 var backD1Index =12;
 var backD2Index =13;
+var homeWIndex =14; 
 
 //Textbox
 var textBoxWidth = 645;
@@ -191,6 +192,9 @@ clickableButtonPressed = function() {
   //change state accordingly
   if (this.id === homeIndex) {
   	adventureManager.clickablePressed(this.name); 
+  	//reposition
+  	playerSprite.position.x = 460;
+	playerSprite.position.y = 480;
   }
   else if (this.id ===landfillIndex) {
   	adventureManager.clickablePressed(this.name);
@@ -199,6 +203,7 @@ clickableButtonPressed = function() {
 	playerSprite.position.y = 40;
 	//gets dirtier
 	dirtyLevel = dirtyLevel +1;
+	print(dirtyLevel);
   }
   else if (this.id ===recycleIndex) {
   	adventureManager.clickablePressed(this.name);
@@ -224,11 +229,14 @@ clickableButtonPressed = function() {
   	water =true;
   	//not environementally friendly way so Earth gets dirtier
   	dirtyLevel = dirtyLevel +1
+  	print(dirtyLevel);
+  	print(water);
   }
   else if (this.id ===nextHIndex) {
   	adventureManager.clickablePressed(this.name);
   	//finished water chore
   	water =true;
+  	print(water);
   }
   else if (this.id ===backIndex) {
   	adventureManager.clickablePressed(this.name);
@@ -251,6 +259,12 @@ clickableButtonPressed = function() {
   else if (this.id ===backD2Index) {
   	adventureManager.clickablePressed(this.name);
   }
+  else if (this.id ===homeWIndex) {
+  	adventureManager.clickablePressed(this.name);
+  	//reposition
+  	playerSprite.position.x = 460;
+	playerSprite.position.y = 480;
+  }
 }
 
 function doorCollide() {
@@ -261,7 +275,15 @@ function doorCollide() {
 		adventureManager.changeState("Hallway");
 	}
 	else if (adventureManager.getStateName() == "Hallway") {
-		adventureManager.changeState("FrontYardBefore");
+		//check if water task is done. 
+		if (water) {
+			adventureManager.changeState("FrontYardWatered")
+		}
+		//if water task is not done
+		else {
+			adventureManager.changeState("FrontYardBefore");
+
+		}
 	}
 	playerSprite.position.x = 400;
 	playerSprite.position.y = 90;
@@ -299,33 +321,71 @@ function landfillCollide() {
 	//trash chore completed
 	trash = true;
 }
+function checkCleanLevel() {
+	
+}
+//add green circle to completed tasks
+function checkmark() {
+	if (water) {
+			circle(267,280,25);
+		}
+	if (trash) {
+			circle(267,313,25);
+		}
+	if (checkBob) {
+			circle(267,386,25);
+		}
+}
 
 //______________Subclasses_________________//
 class FrontYardBefore extends PNGRoom {
 	preload() {
-		//check if water chore is done
-		if (water) {
-			this.homeText = "Let's go back in";
-			clickables[3].visible = false;
-			clickables[4].visible = false;
-		}
-		else {
-			this.homeText = "Okay… So I am out in the front yard to water the grass. But how should I water it? ";
-			clickables[0].visible = false;
-		}
+		//earth text 
+		this.earthTextAfter  = "Let's go back in";
+			
+		this.earthTextBefore = "Okay… So I am out in the front yard to water the grass. But how should I water it? ";
 	}
 	
 	draw() {
 		super.draw();
 
+		//check if dirty
+		if (dirtyLevel !== 0) {
+			adventureManager.changeState("FrontYardDirtyAfter");
+		}
+
 		//text draw setting
 		fill(255);
 		textSize(25);
+
+		//check if watered
+		if (water) {
+			text(this.earthTextAfter, 268, 590, textBoxWidth, textBoxHeight);
+			clickables[3].visible = false;
+			clickables[4].visible = false;
+		}
+		else {
+			text(this.earthTextBefore, 268, 590, textBoxWidth, textBoxHeight);
+			clickables[0].visible = false;
+		}
 
 		//draw text
 		text(this.homeText, 268, 590, textBoxWidth, textBoxHeight);
 	}
 }
+
+class FrontYardWatered extends PNGRoom {
+	preload() {
+		//earth text 
+		this.earthText  = "Let's go back in";
+	}
+	draw() {
+		super.draw();
+		text(this.earthText, 268, 590, textBoxWidth, textBoxHeight);
+	}
+
+}
+
 class Kitchen extends PNGRoom {
 	preload() { 
 		//turn clickables off
@@ -485,6 +545,7 @@ class BackyardRecycle extends PNGRoom {
 		playerSprite.overlap(this.recycle,recycleCollide);
 	}
 }
+
 class BackyardLandfill extends PNGRoom {
 	preload() { 
 		this.earthTextBefore = "Why does our backyard so complicated. But I got to find the Landfill bin!"
@@ -510,4 +571,27 @@ class BackyardLandfill extends PNGRoom {
 		//checkoverlap
 		playerSprite.overlap(this.landfill,landfillCollide);
 	}
+}
+
+class MirrorClean extends PNGRoom {
+	draw () { 
+		super.draw();
+		if (dirtyLevel ==0 ) {
+  		advnetureManager.changeState("MirrorClean");
+  		}
+  		else if (dirtyLevel ==1 ) {
+  			advnetureManager.changeState("MirrorDirty1");
+  		}
+  		else if (dirtyLevel ==2 ) {
+  			advnetureManager.changeState("MirrorDirty2");
+  		}
+	}
+}
+class Note extends PNGRoom {
+	draw() {
+		super.draw();
+		fill (0,128,0);
+		checkmark();
+	}
+
 }

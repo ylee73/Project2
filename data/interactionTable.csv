@@ -27,3 +27,7 @@ FrontYardSprinkler,,,,NextS,,FrontYardWatered
 FrontYardHand,,,,NextH,,FrontYardWatered
 Note,,,,Back,,Kitchen
 Bathroom,,,,Mirror,,MirrorClean
+MirrorClean,,,,BackC,,Bathroom
+MirrorDirty1,,,,BackD1,,Bathroom
+MirrorDirty2,,,,BackD2,,Bathroom
+FrontYardWatered,,,,HomeW,,Hallway

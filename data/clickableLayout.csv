@@ -13,3 +13,4 @@ ID,Name,State,PNGFilename,Text,x,y,width,height
 11,BackC,MirrorClean,,Back,1021,609,100,50
 12,BackD1,MirrorDirty1,,Back,1021,609,100,50
 13,BackD2,MirrorDirty2,,Back,1021,609,100,50
+14,HomeW,FrontYardWatered,,Home,1021,609,100,50
