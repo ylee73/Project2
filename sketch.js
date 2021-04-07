@@ -235,6 +235,9 @@ clickableButtonPressed = function() {
   	//saw note
   	notSeeNote = false;
   	print(notSeeNote);
+  	//reposition
+  	playerSprite.position.x = 520;
+	playerSprite.position.y = 130;
   }
   else if (this.id ===mirrorIndex) {
   	adventureManager.clickablePressed(this.name);
@@ -283,7 +286,7 @@ function noteRead() {
 //pick up box to do the chore
 function pickUp() {
 	print('collided');
-	text("Let's throw this away. But in which bin am I supposed to throw this in?", 268, 590, textBoxWidth, textBoxHeight);
+	this.earthText = "Let's throw this away. But in which bin am I supposed to throw this in?";
 	//turn clickables on
 	clickables[5].visible = true;
 	clickables[6].visible = true;
@@ -341,6 +344,7 @@ class Kitchen extends PNGRoom {
   		this.box = createSprite(905, 463, 48, 33);
   		this.box.addAnimation('box', loadAnimation('assets/box.png'));
 
+  		this.earthText = "what ";
 
 	}
 	draw() {
@@ -359,6 +363,7 @@ class Kitchen extends PNGRoom {
 			drawSprite(this.box);
 			playerSprite.overlap(this.box, pickUp);
 		}
+		text(this.earthText, 268, 590, textBoxWidth, textBoxHeight);
 	}
 }
 
@@ -477,7 +482,7 @@ class BackyardRecycle extends PNGRoom {
 		//draw recycle bin sprite
 		drawSprite(this.recycle);
 		//checkoverlap
-		playerSprite.overlap(this.recycle,recyclecCollide);
+		playerSprite.overlap(this.recycle,recycleCollide);
 	}
 }
 class BackyardLandfill extends PNGRoom {

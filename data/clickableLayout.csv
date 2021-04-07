@@ -7,7 +7,7 @@ ID,Name,State,PNGFilename,Text,x,y,width,height
 5,Recycle,Kitchen,,Recycle,1051,609,100,50
 6,Landfill,Kitchen,,Landfill,895,609,100,50
 7,NextS,FrontYardSprinkler,,Next,1021,609,100,50
-8,NextH,FrontYardHandSprinkler,,Next,1021,609,100,50
+8,NextH,FrontYardHand,,Next,1021,609,100,50
 9,Back,Note,,Back,1021,609,100,50
 10,Mirror,Bathroom,,Mirror,1021,609,100,50
 11,BackC,MirrorClean,,Back,1021,609,100,50

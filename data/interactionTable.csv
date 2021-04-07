@@ -3,7 +3,7 @@ Hallway,,,,,E,Bob'sRoom
 Hallway,,,,,W,Earth'sRoom
 Hallway,,,,,N,LivingRoom
 Hallway,,,,,S,FrontYardBefore
-FrontYardAfter,,,,Home,,Hallway
+FrontYardWatered,,,,Home,,Hallway
 Bob'sRoom,,,,,W,Hallway
 Earth'sRoom,,,,,E,Hallway
 LivingRoom,,,,,N,Kitchen
@@ -23,7 +23,7 @@ Kitchen,,,,Recycle,,BackyardRecycle
 Kitchen,,,,Landfill,,BackyardLandfill
 BackyardRecycle,,,,,W,Kitchen
 BackyardLandfill,,,,,W,Kitchen
-FrontYardSprinkler,,,,NextS,,FrontYardAfter
-FrontYardHand,,,,NextH,,FrontYardAfter
+FrontYardSprinkler,,,,NextS,,FrontYardWatered
+FrontYardHand,,,,NextH,,FrontYardWatered
 Note,,,,Back,,Kitchen
 Bathroom,,,,Mirror,,MirrorClean
