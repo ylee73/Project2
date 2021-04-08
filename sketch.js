@@ -44,6 +44,7 @@ var homeWIndex =14;
 //Textbox
 var textBoxWidth = 645;
 var textBoxHeight = 70;
+var earthText;
 
 //Chores varaibles
 var water = false;
@@ -308,7 +309,6 @@ function noteRead() {
 //pick up box to do the chore
 function pickUp() {
 	print('collided');
-	this.earthText = "Let's throw this away. But in which bin am I supposed to throw this in?";
 	//turn clickables on
 	clickables[5].visible = true;
 	clickables[6].visible = true;
@@ -327,13 +327,13 @@ function checkCleanLevel() {
 //add green circle to completed tasks
 function checkmark() {
 	if (water) {
-			circle(267,280,25);
+			circle(270,280,25);
 		}
 	if (trash) {
-			circle(267,313,25);
+			circle(270,313,25);
 		}
 	if (checkBob) {
-			circle(267,386,25);
+			circle(270,386,25);
 		}
 }
 
@@ -358,7 +358,7 @@ class FrontYardBefore extends PNGRoom {
 		fill(255);
 		textSize(25);
 
-		//check if watered
+		//check if watered and show appropriate button and text
 		if (water) {
 			text(this.earthTextAfter, 268, 590, textBoxWidth, textBoxHeight);
 			clickables[3].visible = false;
@@ -368,9 +368,6 @@ class FrontYardBefore extends PNGRoom {
 			text(this.earthTextBefore, 268, 590, textBoxWidth, textBoxHeight);
 			clickables[0].visible = false;
 		}
-
-		//draw text
-		text(this.homeText, 268, 590, textBoxWidth, textBoxHeight);
 	}
 }
 
@@ -388,27 +385,38 @@ class FrontYardWatered extends PNGRoom {
 
 class Kitchen extends PNGRoom {
 	preload() { 
-		//turn clickables off
-		clickables[5].visible = false;
-		clickables[6].visible = false;
+
+		this.earthTextTrash = "Let's throw this away. But in which bin am I supposedto throw this in?";
 
 		//creat door sprite for collison
 	  	this.door = createSprite(440, 540, 240, 20);
   		this.door.addAnimation('door', loadAnimation('assets/Door.png'));
 
   		//create note sprite for reading mom's note
-  		this.note = createSprite(520, 77, 38, 11);
+  		this.note = createSprite(521, 77, 38, 11);
   		this.note.addAnimation('note', loadAnimation('assets/noteIcon.png'));
 
   		//create box sprite for trash chore
   		this.box = createSprite(905, 463, 48, 33);
   		this.box.addAnimation('box', loadAnimation('assets/box.png'));
 
-  		this.earthText = "what ";
-
 	}
+
+	load() {
+		//superclass 
+		super.load();
+
+		//add earth image
+		this.earthImage = loadImage('assets/EarthText.png');
+	}
+
 	draw() {
 		super.draw();
+		text(this.earthTextTrash, 268, 590, textBoxWidth, textBoxHeight);
+
+		//turn clickables off
+		clickables[5].visible = false;
+		clickables[6].visible = false;
 
 		//draw door sprite
 		drawSprite(this.door);
@@ -423,7 +431,9 @@ class Kitchen extends PNGRoom {
 			drawSprite(this.box);
 			playerSprite.overlap(this.box, pickUp);
 		}
-		text(this.earthText, 268, 590, textBoxWidth, textBoxHeight);
+		
+		//draw image of earth 
+		image(this.earthImage,73,570);
 	}
 }
 
@@ -593,5 +603,4 @@ class Note extends PNGRoom {
 		fill (0,128,0);
 		checkmark();
 	}
-
 }

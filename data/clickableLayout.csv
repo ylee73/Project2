@@ -1,5 +1,5 @@
 ID,Name,State,PNGFilename,Text,x,y,width,height
-0,Home,FrontYardBefore,,Home,1021,609,100,50
+0,Home,FrontYardWatered,,Home,1021,609,100,50
 1,Start,Instructions,,Start,539,625,100,50
 2,Instructions,IntroScreen,,Instructions,539,625,100,50
 3,Sprinkler,FrontYardBefore,assets/Sprinkler.png,,891,579,123,123
@@ -13,4 +13,4 @@ ID,Name,State,PNGFilename,Text,x,y,width,height
 11,BackC,MirrorClean,,Back,1021,609,100,50
 12,BackD1,MirrorDirty1,,Back,1021,609,100,50
 13,BackD2,MirrorDirty2,,Back,1021,609,100,50
-14,HomeW,FrontYardWatered,,Home,1021,609,100,50
+14,HomeD,FrontYardDirty,,Home,1021,609,100,50
