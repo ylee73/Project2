@@ -20,4 +20,4 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 18,MirrorClean,PNGRoom,assets/MirrorClean.png,
 19,FrontYardDirtyAfter,PNGRoom,assets/FrontYardDirtyAfter.png,
 20,FrontYardDirtyBefore,FrontYardBefore,assets/FrontYardDirtyBefore.png,
-21,BackyardRecycle,BackyardRecycle,assets/BackyardRecycle.png,BackyardLandfill_cl.csv
+21,BackyardRecycle,BackyardRecycle,assets/BackyardRecycle.png,assets/BackyardLandfill_cl.csv

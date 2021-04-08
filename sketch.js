@@ -44,7 +44,7 @@ var homeWIndex =14;
 //Textbox
 var textBoxWidth = 645;
 var textBoxHeight = 70;
-var earthText;
+var earthText = "";
 
 //Chores varaibles
 var water = false;
@@ -310,10 +310,12 @@ function noteRead() {
 
 //pick up box to do the chore
 function pickUp() {
-	print('collided');
+	//print('collided');
+	earthText = "Let's throw this away. But in which bin am I supposedto throw this in?";
 	//turn clickables on
 	clickables[5].visible = true;
 	clickables[6].visible = true;
+
 }
 function recycleCollide() {
 	//trash chore completed
@@ -391,8 +393,6 @@ class FrontYardWatered extends PNGRoom {
 class Kitchen extends PNGRoom {
 	preload() { 
 
-		this.earthTextTrash = "Let's throw this away. But in which bin am I supposedto throw this in?";
-
 		//creat door sprite for collison
 	  	this.door = createSprite(440, 540, 240, 20);
   		this.door.addAnimation('door', loadAnimation('assets/Door.png'));
@@ -417,7 +417,6 @@ class Kitchen extends PNGRoom {
 
 	draw() {
 		super.draw();
-		text(this.earthTextTrash, 268, 590, textBoxWidth, textBoxHeight);
 
 		//turn clickables off
 		clickables[5].visible = false;
@@ -436,9 +435,11 @@ class Kitchen extends PNGRoom {
 			drawSprite(this.box);
 			playerSprite.overlap(this.box, pickUp);
 		}
-		
+
 		//draw image of earth 
 		image(this.earthImage,73,570);
+
+		text(earthText, 268, 590, textBoxWidth, textBoxHeight);
 	}
 }
 
