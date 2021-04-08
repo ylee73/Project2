@@ -226,18 +226,18 @@ clickableButtonPressed = function() {
   }
   else if (this.id ===nextSIndex) {
   	adventureManager.clickablePressed(this.name);
-  	//finished water chore
-  	water =true;
   	//not environementally friendly way so Earth gets dirtier
   	dirtyLevel = dirtyLevel +1
+  	//finished water chore
+  	water = true;
+
   	print(dirtyLevel);
   	print(water);
   }
   else if (this.id ===nextHIndex) {
   	adventureManager.clickablePressed(this.name);
   	//finished water chore
-  	water =true;
-  	print(water);
+  	water = true;
   }
   else if (this.id ===backIndex) {
   	adventureManager.clickablePressed(this.name);
@@ -262,9 +262,11 @@ clickableButtonPressed = function() {
   }
   else if (this.id ===homeWIndex) {
   	adventureManager.clickablePressed(this.name);
+
   	//reposition
   	playerSprite.position.x = 460;
 	playerSprite.position.y = 480;
+
   }
 }
 
@@ -349,11 +351,6 @@ class FrontYardBefore extends PNGRoom {
 	draw() {
 		super.draw();
 
-		//check if dirty
-		if (dirtyLevel !== 0) {
-			adventureManager.changeState("FrontYardDirtyAfter");
-		}
-
 		//text draw setting
 		fill(255);
 		textSize(25);
@@ -378,6 +375,14 @@ class FrontYardWatered extends PNGRoom {
 	}
 	draw() {
 		super.draw();
+
+		//check if dirty and finished water task
+		if (dirtyLevel !== 0) {
+			if (water == true) {
+				adventureManager.changeState("FrontYardDirtyAfter");
+			}
+		}
+
 		text(this.earthText, 268, 590, textBoxWidth, textBoxHeight);
 	}
 
@@ -470,8 +475,8 @@ class Hallway extends PNGRoom {
   		//create door spirte for top door collison
   		this.door2 = createSprite(440, 0, 240, 20);
   		this.door2.addAnimation('door', loadAnimation('assets/Door.png'));
-
 	}
+
 	draw() {
 		super.draw();
 		//draw door sprite
@@ -481,6 +486,7 @@ class Hallway extends PNGRoom {
 		//check for overlap with door and main character and switch to next state when collided
 		playerSprite.overlap(this.door,doorCollide);
 		playerSprite.overlap(this.door2,doorCollide2);
+
 	}
 }
 
@@ -488,8 +494,17 @@ class EarthRoom extends PNGRoom {
 	preload() { 
 		this.earthTextBefore = "Time to rise and shine! I wonder if Mom is awake. Let's go to her room"
 		this.earthTextAfter = "I should always remember to keep myself clean."
+	}
+
+	load() {
+		//superclass 
+		super.load();
+
+		//add earth image
+		this.earthImage = loadImage('assets/EarthText.png');
 
 	}
+
 	draw() {
 		super.draw();
 		//text draw setting
@@ -503,6 +518,9 @@ class EarthRoom extends PNGRoom {
 		else {
 			text(this.earthTextAfter, 268, 590, textBoxWidth, textBoxHeight);
 		}
+
+		//draw image of earth 
+		image(this.earthImage,73,570);
 	}
 }
 
@@ -511,6 +529,15 @@ class MomRoom extends PNGRoom {
 		this.earthTextBefore = "She is not here? Maybe she went out already. I wonder if she wrote a note for me on the fridge."
 		this.earthTextAfter  = "I wonder when she is going to come back."
 	}
+
+	load() {
+		//superclass 
+		super.load();
+
+		//add earth image
+		this.earthImage = loadImage('assets/EarthText.png');
+	}
+
 	draw() {
 		super.draw();
 		//text draw setting
@@ -525,7 +552,9 @@ class MomRoom extends PNGRoom {
 		else {
 			text(this.earthTextAfter, 268, 590, textBoxWidth, textBoxHeight);
 		}
-		
+
+		//draw image of earth 
+		image(this.earthImage,73,570);
 	}
 }
 class BackyardRecycle extends PNGRoom {
@@ -536,6 +565,15 @@ class BackyardRecycle extends PNGRoom {
 	  	this.recycle = createSprite(830, 210, 67, 97);
   		this.recycle.addAnimation('recycle', loadAnimation('assets/Recycle.png'));
 	}
+
+	load() {
+		//superclass 
+		super.load();
+
+		//add earth image
+		this.earthImage = loadImage('assets/EarthText.png');
+	}
+
 	draw() {
 		super.draw();
 
@@ -553,6 +591,9 @@ class BackyardRecycle extends PNGRoom {
 		drawSprite(this.recycle);
 		//checkoverlap
 		playerSprite.overlap(this.recycle,recycleCollide);
+
+		//draw image of earth 
+		image(this.earthImage,73,570);
 	}
 }
 
@@ -564,6 +605,15 @@ class BackyardLandfill extends PNGRoom {
 	  	this.landfill = createSprite(830, 210, 67, 97);
   		this.landfill.addAnimation('landfill', loadAnimation('assets/Landfill.png'));
 	}
+
+	load() {
+		//superclass 
+		super.load();
+
+		//add earth image
+		this.earthImage = loadImage('assets/EarthText.png');
+	}
+
 	draw() {
 		super.draw();
 
@@ -580,6 +630,9 @@ class BackyardLandfill extends PNGRoom {
 		drawSprite(this.landfill);
 		//checkoverlap
 		playerSprite.overlap(this.landfill,landfillCollide);
+
+		//draw image of earth 
+		image(this.earthImage,73,570);
 	}
 }
 
