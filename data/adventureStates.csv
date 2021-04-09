@@ -3,7 +3,7 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 1,FrontYardBefore,FrontYardBefore,assets/FrontYardBefore.png,
 2,FrontYardSprinkler,PNGRoom,assets/FrontYardSprinkler.png,
 3,FrontYardHand,PNGRoom,assets/FrontYardHandSprinkler.png,
-4,FrontYardWatered,PNGRoom,assets/FrontYardWatered.png,
+4,FrontYardWatered,FrontYardWatered,assets/FrontYardWatered.png,
 5,Bob'sRoom,PNGRoom,assets/Bob'sRoom.png,assets/Bob'sRoom_cl.csv
 6,Earth'sRoom,EarthRoom,assets/EarthRoom.png,assets/EarthRoom_cl.csv
 7,LivingRoom,LivingRoom,assets/LivingRoom.png,assets/LivingRoom_cl.csv
@@ -17,7 +17,7 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 15,Note,Note,assets/Note.png,
 16,MirrorDirty1,PNGRoom,assets/MirrorDirty1.png,
 17,MirrorDirty2,PNGRoom,assets/MirrorDirty2.png,
-18,MirrorClean,PNGRoom,assets/MirrorClean.png,
+18,MirrorClean,MirrorClean,assets/MirrorClean.png,
 19,FrontYardDirtyAfter,PNGRoom,assets/FrontYardDirtyAfter.png,
 20,FrontYardDirtyBefore,FrontYardBefore,assets/FrontYardDirtyBefore.png,
 21,BackyardRecycle,BackyardRecycle,assets/BackyardRecycle.png,assets/BackyardLandfill_cl.csv

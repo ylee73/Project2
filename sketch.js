@@ -41,10 +41,12 @@ var backD1Index =12;
 var backD2Index =13;
 var homeWIndex =14; 
 
-//Textbox
+//Speaking Textbox + character image
 var textBoxWidth = 645;
 var textBoxHeight = 70;
-var earthText = "";
+var earthText = " ";
+var earthImage;
+
 
 //Chores varaibles
 var water = false;
@@ -55,12 +57,17 @@ var dirtyLevel = 0;
 //Logistics varaibles
 var notSeeNote = true; //check if user saw mom's note
 var preivousState;
+var goHome = false; //check if user went home
 
 
 //load adventure manager with states and interacions tables
 function preload(){
 	clickablesManager = new ClickableManager('data/clickableLayout.csv');
 	adventureManager = new AdventureManager('data/adventureStates.csv', 'data/interactionTable.csv', 'data/clickableLayout.csv');
+	//add earth image
+	earthImage = loadImage('assets/EarthText.png');
+	earthImageDirty1 = loadImage('assets/earthImage_dirty1.png');
+	earthImageDirty2 = loadImage('assets/earthImage_dirty2.png');
 }
 
 // Setup code 
@@ -121,6 +128,16 @@ function draw() {
  	 //draw sprite
 	drawSprite(playerSprite);
   }
+
+  //text draw setting
+	fill(255);
+	textSize(25);
+
+  	//earth text 
+ 	text(earthText, 268, 590, textBoxWidth, textBoxHeight);
+
+ 	//draw image of earth after checking the dirty level
+	dirtyCheck();
 
   //record state 
   previousState = adventureManager.getStateName;
@@ -196,15 +213,15 @@ clickableButtonPressed = function() {
   	//reposition
   	playerSprite.position.x = 460;
 	playerSprite.position.y = 480;
+
+	//change goHome to true
+	goHome = true; 
   }
   else if (this.id ===landfillIndex) {
   	adventureManager.clickablePressed(this.name);
   	//reposition sprite
   	playerSprite.position.x = 80;
 	playerSprite.position.y = 40;
-	//gets dirtier
-	dirtyLevel = dirtyLevel +1;
-	print(dirtyLevel);
   }
   else if (this.id ===recycleIndex) {
   	adventureManager.clickablePressed(this.name);
@@ -291,6 +308,21 @@ function doorCollide() {
 	playerSprite.position.x = 400;
 	playerSprite.position.y = 90;
 }
+//check dirty level of earth 
+function dirtyCheck() { 
+	if (dirtyLevel == 0) {
+		//draw image of earth clean
+		image(earthImage, 73,570);
+	}
+	else if (dirtyLevel == 1) {
+		//draw image of earth dirty 1
+		image(earthImageDirty1, 73, 570);
+	}
+	else {
+		//draw image of earth dirty 2
+		image(earthImageDirty2, 73, 570);
+	}
+}
 
 // move the sprite to appropriate location when moving up from Hallway and Living Room 
 function doorCollide2() {
@@ -310,8 +342,9 @@ function noteRead() {
 
 //pick up box to do the chore
 function pickUp() {
-	//print('collided');
-	earthText = "Let's throw this away. But in which bin am I supposedto throw this in?";
+	//set text for trash task
+	earthText = "Let's throw this box away. But in which bin am I supposedto throw this in?";
+
 	//turn clickables on
 	clickables[5].visible = true;
 	clickables[6].visible = true;
@@ -320,14 +353,18 @@ function pickUp() {
 function recycleCollide() {
 	//trash chore completed
 	trash = true;
+	//earth text after throwing the trash away 
+	earthText = "Into the Recycling bin it goes. Let's go back to the Kitchen.";
 }
 function landfillCollide() {
 	//trash chore completed
 	trash = true;
+	//gets dirtier
+	dirtyLevel = dirtyLevel +1;
+	//earth text after throwing the trash away 
+	earthText = "Into the Landfill bin it goes. Let's go back to the Kitchen.";
 }
-function checkCleanLevel() {
-	
-}
+
 //add green circle to completed tasks
 function checkmark() {
 	if (water) {
@@ -342,50 +379,46 @@ function checkmark() {
 }
 
 //______________Subclasses_________________//
+
 class FrontYardBefore extends PNGRoom {
-	preload() {
+	load() {
+		super.load();
 		//earth text 
-		this.earthTextAfter  = "Let's go back in";
-			
-		this.earthTextBefore = "Okay… So I am out in the front yard to water the grass. But how should I water it? ";
+		if (water) {
+			eathText = "Let's go back in and check the note to see if I missed any chores"; 
+		}
+		else {
+			earthText = "Okay… So I am out in the front yard to water the grass. But how should I water it? ";
+		}
 	}
-	
+	unload() {
+		super.unload();
+		earthText =" ";
+	}
 	draw() {
 		super.draw();
 
-		//text draw setting
-		fill(255);
-		textSize(25);
-
 		//check if watered and show appropriate button and text
 		if (water) {
-			text(this.earthTextAfter, 268, 590, textBoxWidth, textBoxHeight);
 			clickables[3].visible = false;
 			clickables[4].visible = false;
 		}
 		else {
-			text(this.earthTextBefore, 268, 590, textBoxWidth, textBoxHeight);
 			clickables[0].visible = false;
 		}
 	}
 }
 
 class FrontYardWatered extends PNGRoom {
-	preload() {
-		//earth text 
-		this.earthText  = "Let's go back in";
-	}
 	draw() {
 		super.draw();
 
 		//check if dirty and finished water task
-		if (dirtyLevel !== 0) {
-			if (water == true) {
+		if (dirtyLevel > 1) {
+			if(goHome){
 				adventureManager.changeState("FrontYardDirtyAfter");
 			}
 		}
-
-		text(this.earthText, 268, 590, textBoxWidth, textBoxHeight);
 	}
 
 }
@@ -407,12 +440,9 @@ class Kitchen extends PNGRoom {
 
 	}
 
-	load() {
-		//superclass 
-		super.load();
-
-		//add earth image
-		this.earthImage = loadImage('assets/EarthText.png');
+	unload() {
+		super.unload();
+		earthText =" ";
 	}
 
 	draw() {
@@ -435,11 +465,6 @@ class Kitchen extends PNGRoom {
 			drawSprite(this.box);
 			playerSprite.overlap(this.box, pickUp);
 		}
-
-		//draw image of earth 
-		image(this.earthImage,73,570);
-
-		text(earthText, 268, 590, textBoxWidth, textBoxHeight);
 	}
 }
 
@@ -492,76 +517,45 @@ class Hallway extends PNGRoom {
 }
 
 class EarthRoom extends PNGRoom {
-	preload() { 
-		this.earthTextBefore = "Time to rise and shine! I wonder if Mom is awake. Let's go to her room"
-		this.earthTextAfter = "I should always remember to keep myself clean."
-	}
-
-	load() {
-		//superclass 
+	load() { 
 		super.load();
 
-		//add earth image
-		this.earthImage = loadImage('assets/EarthText.png');
-
-	}
-
-	draw() {
-		super.draw();
-		//text draw setting
-		fill(255);
-		textSize(25);
-		//draw text
-		//check if user saw the mom's note
+		//check is use saw mom's note
 		if (notSeeNote) {
-			text(this.earthTextBefore, 268, 590, textBoxWidth, textBoxHeight);
+			earthText = "Time to rise and shine! I wonder if Mom is awake. Let's go to her room";
 		}
 		else {
-			text(this.earthTextAfter, 268, 590, textBoxWidth, textBoxHeight);
+			earthText = "I should always remember to keep myself clean.";
 		}
+	}
+	unload() {
+		super.unload();
 
-		//draw image of earth 
-		image(this.earthImage,73,570);
+		earthText =" ";
 	}
 }
 
 class MomRoom extends PNGRoom {
-	preload() { 
-		this.earthTextBefore = "She is not here? Maybe she went out already. I wonder if she wrote a note for me on the fridge."
-		this.earthTextAfter  = "I wonder when she is going to come back."
-	}
-
 	load() {
 		//superclass 
 		super.load();
 
-		//add earth image
-		this.earthImage = loadImage('assets/EarthText.png');
-	}
-
-	draw() {
-		super.draw();
-		//text draw setting
-		fill(255);
-		textSize(25);
-
-		//draw text
-		//check if user saw the mom's note
+		//check is use saw mom's note
 		if (notSeeNote) {
-			text(this.earthTextBefore, 268, 590, textBoxWidth, textBoxHeight);
+			earthText = "She is not here? Maybe she went out already. I wonder if she wrote a note for me on the fridge."
 		}
 		else {
-			text(this.earthTextAfter, 268, 590, textBoxWidth, textBoxHeight);
+			earthText = "I wonder when she is going to come back."
 		}
+	}
 
-		//draw image of earth 
-		image(this.earthImage,73,570);
+	unload() {
+		super.unload();
+		earthText =" ";
 	}
 }
 class BackyardRecycle extends PNGRoom {
 	preload() { 
-		this.earthTextBefore = "Why does our backyard so complicated. But I got to find the recycle bin!"
-		this.earthTextAfter ="Yay! Into the Recycling bin it goes. Let's go back to the Kitchen."
 		//recycle bin sprite for collison
 	  	this.recycle = createSprite(830, 210, 67, 97);
   		this.recycle.addAnimation('recycle', loadAnimation('assets/Recycle.png'));
@@ -570,70 +564,51 @@ class BackyardRecycle extends PNGRoom {
 	load() {
 		//superclass 
 		super.load();
+		earthText = "Why is our backyard so complicated. But I got to find the recycle bin!";
+	}
 
-		//add earth image
-		this.earthImage = loadImage('assets/EarthText.png');
+	unload() {
+		super.unload();
+		earthText =" ";
 	}
 
 	draw() {
 		super.draw();
 
 		moveSprite();
-		//text draw setting
-		fill(255);
-		textSize(25);
-		if (trash) {
-			text(this.earthTextAfter, 268, 590, textBoxWidth, textBoxHeight);
-		}
-		else {
-			text(this.earthTextBefore, 268, 590, textBoxWidth, textBoxHeight);	
-		}
+		
 		//draw recycle bin sprite
 		drawSprite(this.recycle);
 		//checkoverlap
 		playerSprite.overlap(this.recycle,recycleCollide);
-
-		//draw image of earth 
-		image(this.earthImage,73,570);
 	}
 }
 
 class BackyardLandfill extends PNGRoom {
 	preload() { 
-		this.earthTextBefore = "Why does our backyard so complicated. But I got to find the Landfill bin!"
-		this.earthTextAfter = "Into the Landfill bin it goes. Let's go back to the Kitchen."
 		//recycle bin sprite for collison
 	  	this.landfill = createSprite(830, 210, 67, 97);
   		this.landfill.addAnimation('landfill', loadAnimation('assets/Landfill.png'));
 	}
-
 	load() {
 		//superclass 
 		super.load();
+		//check is if trash task is completed and load appropriate text
+		earthText = "Why is our backyard so complicated. But I got to find the landfill bin!";
+	}
 
-		//add earth image
-		this.earthImage = loadImage('assets/EarthText.png');
+	unload() {
+		super.unload();
+		earthText =" ";
 	}
 
 	draw() {
 		super.draw();
 
-		//text draw setting
-		fill(255);
-		textSize(25);
-		if (trash) {
-			text(this.earthTextAfter, 268, 590, textBoxWidth, textBoxHeight);
-		}
-		else {
-			text(this.earthTextBefore, 268, 590, textBoxWidth, textBoxHeight);	
-		}
 		//draw recycle bin sprite
 		drawSprite(this.landfill);
 		//checkoverlap
 		playerSprite.overlap(this.landfill,landfillCollide);
-
-		//draw image of earth 
-		image(this.earthImage,73,570);
 	}
 }
 
@@ -641,17 +616,36 @@ class MirrorClean extends PNGRoom {
 	draw () { 
 		super.draw();
 		if (dirtyLevel ==0 ) {
-  		advnetureManager.changeState("MirrorClean");
+  		adventureManager.changeState("MirrorClean");
   		}
   		else if (dirtyLevel ==1 ) {
-  			advnetureManager.changeState("MirrorDirty1");
+  			adventureManager.changeState("MirrorDirty1");
   		}
   		else if (dirtyLevel ==2 ) {
-  			advnetureManager.changeState("MirrorDirty2");
+  			adventureManager.changeState("MirrorDirty2");
   		}
 	}
 }
 class Note extends PNGRoom {
+	load() {
+		//superclass 
+		super.load();
+		if (water == false){
+			earthText = "Okay I have to do all of these tasks. Maybe I can start by watering the front yard";
+		}
+		else if (trash == false ) {
+			earthText = "1 is done. So I guess I can move on to chore number 2."; 
+		}
+		else {
+			earthText = "One more task to do! Hope Bob isn't doing anything bad...";
+		}
+	}
+
+	unload() {
+		super.unload();
+		earthText =" ";
+	}
+
 	draw() {
 		super.draw();
 		fill (0,128,0);
