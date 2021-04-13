@@ -592,7 +592,7 @@ class BobRoom extends PNGRoom {
 	preload() { 
 
 		//creat AC controler sprite for collison
-	  	this.controler = createSprite(770, 533, 84, 15);
+	  	this.controler = createSprite(800, 533, 84, 15);
   		this.controler.addAnimation('controler', loadAnimation('assets/Controler.png'));
 	}
 
@@ -606,7 +606,7 @@ class BobRoom extends PNGRoom {
 		//draw controler sprite
 		drawSprite(this.controler);
 		//check for overlap with door and main character and switch to next state when collided
-		playerSprite.overlap(this.contr,controlerCollide);
+		//playerSprite.overlap(this.controler,controlerCollide);
 	}
 }
 
