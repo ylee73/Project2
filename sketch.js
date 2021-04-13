@@ -66,8 +66,7 @@ var textDirty1 = false; //check if earth got dirtier and reveal mirror text
 var textDirty1 = false; 
 var tempNumb = 68;
 var digitalFont;
-var bobSpeaking = false;
-var momSpeaking = false; 
+var talkImage = null; //check if image is other than main player 
 
 
 
@@ -152,7 +151,7 @@ function draw() {
  	text(earthText, 268, 590, textBoxWidth, textBoxHeight);
 
  	//draw image of earth after checking the dirty level
-	imageCheck();
+	drawTalkImage();
 
   //record state 
   previousState = adventureManager.getStateName;
@@ -312,10 +311,6 @@ clickableButtonPressed = function() {
   	playerSprite.position.x = 784;
 	playerSprite.position.y = 404;
   }
-  else if (this.id ===nextBIndex) {
-  	earthText = "No! Climate change is real! Let me check the remote next to the AC."; 
-  	bobSpeaking = false;
-  }
 }
 
 function doorCollide() {
@@ -378,6 +373,16 @@ function imageCheck() {
 	else if (dirtyLevel == 2) {
 		//draw image of earth dirty 2
 		image(earthImageDirty2, 73, 570);
+	}
+}
+
+function drawTalkImage() {
+	if (talkImage === null) {
+		//draw image of earth
+		imageCheck();
+	}
+	else {
+		image(talkImage, 73, 570);
 	}
 }
 
@@ -451,11 +456,10 @@ function temperature() {
 }
 
 function talkBob() {
-	//display bob image
-	image(bobImage, 73,570);
-	//display first message when collided
+	//set talkImage to bobImage
+	talkImage =bobImage;
+	//display bob's message when collided
 	earthText = "Let me be! Climate change is not true. Just let me enjoy my AC!"
-	earthImage.visible =false;
 }
 
 //______________Subclasses_________________//
@@ -656,7 +660,12 @@ class BobRoom extends PNGRoom {
 	load() {
 		super.load()
 		
-		earthText = "Ah it is so cold in here! Let me check the remote next to the AC"
+		if (checkBob == false) {
+			earthText = "Ah it is so cold in here! Let me check the remote next to the AC.";
+		}
+		else {
+			earthText = "Bob you got to understand that your actions may affect the world we are living on!";
+		}
 
 		//add Bob image
 		bobImage = loadImage('assets/bobImage.png');
@@ -665,6 +674,7 @@ class BobRoom extends PNGRoom {
 	unload() {
 		super.unload();
 		earthText =" ";
+		talkImage = null;
 	}
 
 	draw() {
@@ -805,7 +815,6 @@ class Note extends PNGRoom {
 }
 
 class AC extends PNGRoom {
-
 	load() {
 		super.load();
 		//font for AC number 
