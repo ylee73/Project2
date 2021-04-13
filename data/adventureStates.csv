@@ -13,7 +13,7 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 11,Bathroom,PNGRoom,assets/Bathroom.png,assets/Bathroom_cl.csv
 12,Hallway,Hallway,assets/Hallway.png,assets/Hallway_cl.csv
 13,Instructions,PNGRoom,assets/Instructions.png,
-14,AC,PNGRoom,assets/AC.png,
+14,AC,AC,assets/AC.png,
 15,Note,Note,assets/Note.png,
 16,MirrorDirty1,PNGRoom,assets/MirrorDirty1.png,
 17,MirrorDirty2,PNGRoom,assets/MirrorDirty2.png,

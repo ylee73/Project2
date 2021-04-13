@@ -40,6 +40,9 @@ var backCIndex =11;
 var backD1Index =12;
 var backD2Index =13;
 var homeWIndex =14; 
+var downButtonIndex =15; 
+var upButtonIndex =16; 
+var backACIndex =17; 
 
 //Speaking Textbox + character image
 var textBoxWidth = 645;
@@ -61,6 +64,7 @@ var goHome = false; //check if user went home
 var textDirty1 = false; //check if earth got dirtier and reveal mirror text 
 var textDirty1 = false; 
 var tempNumb = 68;
+var digitalFont;
 
 
 
@@ -289,6 +293,18 @@ clickableButtonPressed = function() {
 	playerSprite.position.y = 480;
 
   }
+  else if (this.id ===downButtonIndex) {
+  	tempNumb = tempNumb -1; 
+  }
+  else if (this.id ===upButtonIndex) {
+  	tempNumb = tempNumb +1; 
+  }
+  else if (this.id ===backACIndex) {
+  	adventureManager.clickablePressed(this.name);
+  	//reposition player 
+  	playerSprite.position.x = 784;
+	playerSprite.position.y = 404;
+  }
 }
 
 function doorCollide() {
@@ -315,7 +331,7 @@ function doorCollide() {
 
 function controlerCollide() {
 	//change state to AC when collide
-	if(adventrueManager.getStateName() == "Bob'sRoom") {
+	if(adventureManager.getStateName() == "Bob'sRoom") {
 		adventureManager.changeState("AC");
 	}
 }
@@ -412,6 +428,12 @@ function temperature() {
 	textFont(digitalFont);
 	textSize(130);
 	text(tempNumb, 550, 200);
+	//check if tempNumb is 72 
+	if (tempNumb == 72) {
+		//change earth text and update the status of the check bob task
+		earthText = "Okay we are good now. I think I am done checking up on Bob and solving his issue." 
+		checkBob = true; 
+	}
 }
 
 //______________Subclasses_________________//
@@ -606,7 +628,7 @@ class BobRoom extends PNGRoom {
 		//draw controler sprite
 		drawSprite(this.controler);
 		//check for overlap with door and main character and switch to next state when collided
-		//playerSprite.overlap(this.controler,controlerCollide);
+		playerSprite.overlap(this.controler,controlerCollide);
 	}
 }
 
@@ -749,7 +771,9 @@ class AC extends PNGRoom {
 		earthText =" ";
 	}
 	draw() {
+		super.draw();
 		//reveal appropriate temperature digit
 		temperature();
+
 	}
 }

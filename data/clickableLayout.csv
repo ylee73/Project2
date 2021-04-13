@@ -14,3 +14,6 @@ ID,Name,State,PNGFilename,Text,x,y,width,height
 12,BackD1,MirrorDirty1,,Back,1021,609,100,50
 13,BackD2,MirrorDirty2,,Back,1021,609,100,50
 14,HomeD,FrontYardDirtyAfter,,Home,1021,609,100,50
+15,DownButton,AC,assets/DownButton.png,,866,400,118,80
+16,UpButton,AC,assets/UpButton.png,,240,400,118,80
+17,BackAC,AC,,Back,1021,609,100,50
