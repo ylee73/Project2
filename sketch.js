@@ -49,6 +49,7 @@ var textBoxWidth = 645;
 var textBoxHeight = 70;
 var earthText = " ";
 var earthImage;
+var bobImage;
 
 
 //Chores varaibles
@@ -65,6 +66,8 @@ var textDirty1 = false; //check if earth got dirtier and reveal mirror text
 var textDirty1 = false; 
 var tempNumb = 68;
 var digitalFont;
+var bobSpeaking = false;
+var momSpeaking = false; 
 
 
 
@@ -76,6 +79,10 @@ function preload(){
 	earthImage = loadImage('assets/EarthText.png');
 	earthImageDirty1 = loadImage('assets/earthImage_dirty1.png');
 	earthImageDirty2 = loadImage('assets/earthImage_dirty2.png');
+	
+	//add Mom image 
+	momImageHappy = loadImage('assets/momHappy.png');
+	momImageSad = loadImage('assets/momSad.png');
 }
 
 // Setup code 
@@ -145,7 +152,7 @@ function draw() {
  	text(earthText, 268, 590, textBoxWidth, textBoxHeight);
 
  	//draw image of earth after checking the dirty level
-	dirtyCheck();
+	imageCheck();
 
   //record state 
   previousState = adventureManager.getStateName;
@@ -305,6 +312,10 @@ clickableButtonPressed = function() {
   	playerSprite.position.x = 784;
 	playerSprite.position.y = 404;
   }
+  else if (this.id ===nextBIndex) {
+  	earthText = "No! Climate change is real! Let me check the remote next to the AC."; 
+  	bobSpeaking = false;
+  }
 }
 
 function doorCollide() {
@@ -354,7 +365,8 @@ function dirtyText() {
 }
 
 //check dirty level of earth 
-function dirtyCheck() { 
+function imageCheck() { 
+
 	if (dirtyLevel == 0) {
 		//draw image of earth clean
 		image(earthImage, 73,570);
@@ -363,7 +375,7 @@ function dirtyCheck() {
 		//draw image of earth dirty 1
 		image(earthImageDirty1,73, 570);
 	}
-	else {
+	else if (dirtyLevel == 2) {
 		//draw image of earth dirty 2
 		image(earthImageDirty2, 73, 570);
 	}
@@ -434,6 +446,13 @@ function temperature() {
 		earthText = "Okay we are good now. I think I am done checking up on Bob and solving his issue." 
 		checkBob = true; 
 	}
+}
+
+function talkBob() {
+	//display bob image
+	image(bobImage, 73,570);
+	//display first message when collided
+	earthText = "Let me be! Climate change is not true. Just let me enjoy my AC!"
 }
 
 //______________Subclasses_________________//
@@ -616,6 +635,19 @@ class BobRoom extends PNGRoom {
 		//creat AC controler sprite for collison
 	  	this.controler = createSprite(800, 533, 84, 15);
   		this.controler.addAnimation('controler', loadAnimation('assets/Controler.png'));
+
+  		//create Bob NPC sprite
+  		this.bobNPC = createSprite(1066, 310, 44, 132);
+  		this.bobNPC.addAnimation('bob', loadAnimation('assets/bob.png'));
+	}
+
+	load() {
+		super.load()
+		
+		earthText = "Ah it is so cold in here! Let me check the remote next to the AC"
+
+		//add Bob image
+		bobImage = loadImage('assets/bobImage.png');
 	}
 
 	unload() {
@@ -629,6 +661,9 @@ class BobRoom extends PNGRoom {
 		drawSprite(this.controler);
 		//check for overlap with door and main character and switch to next state when collided
 		playerSprite.overlap(this.controler,controlerCollide);
+		//draw Bob sprite
+		drawSprite(this.bobNPC);
+		playerSprite.overlap(this.bobNPC, talkBob);
 	}
 }
 
@@ -740,7 +775,7 @@ class Note extends PNGRoom {
 			earthText = "One more task to do! Hope Bob isn't doing anything bad...";
 		}
 		else {
-			earthText = "Yay! I finsihed everything";
+			earthText = "Yay! I finished everything";
 		}
 	}
 
@@ -774,6 +809,5 @@ class AC extends PNGRoom {
 		super.draw();
 		//reveal appropriate temperature digit
 		temperature();
-
 	}
 }
