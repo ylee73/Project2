@@ -58,6 +58,10 @@ var dirtyLevel = 0;
 var notSeeNote = true; //check if user saw mom's note
 var preivousState;
 var goHome = false; //check if user went home
+var textDirty1 = false; //check if earth got dirtier and reveal mirror text 
+var textDirty1 = false; 
+var tempNumb = 68;
+
 
 
 //load adventure manager with states and interacions tables
@@ -308,6 +312,31 @@ function doorCollide() {
 	playerSprite.position.x = 400;
 	playerSprite.position.y = 90;
 }
+
+function controlerCollide() {
+	//change state to AC when collide
+	if(adventrueManager.getStateName() == "Bob'sRoom") {
+		adventureManager.changeState("AC");
+	}
+}
+
+function dirtyText() {
+//lead user to the bathroom when earth gets to dirty level 1
+	if (dirtyLevel == 1) {
+		if (textDirty1 == false) {
+			earthText = "Oh no I think I got dirtier! Let's go to the bathroom to check the mirror.";
+			textDirty1 = true; 
+		}
+	}
+	else if (dirtyLevel == 2) {
+		if (textDirty1 == false) {
+		earthText = "Oh not I got even dirtier! Let's go to the bathroom to check the mirror.";			
+		textDirty1 = true; 
+		}
+	}
+
+}
+
 //check dirty level of earth 
 function dirtyCheck() { 
 	if (dirtyLevel == 0) {
@@ -316,7 +345,7 @@ function dirtyCheck() {
 	}
 	else if (dirtyLevel == 1) {
 		//draw image of earth dirty 1
-		image(earthImageDirty1, 73, 570);
+		image(earthImageDirty1,73, 570);
 	}
 	else {
 		//draw image of earth dirty 2
@@ -378,6 +407,13 @@ function checkmark() {
 		}
 }
 
+function temperature() {
+	//change text setting for temperature number
+	textFont(digitalFont);
+	textSize(130);
+	text(tempNumb, 550, 200);
+}
+
 //______________Subclasses_________________//
 
 class FrontYardBefore extends PNGRoom {
@@ -413,7 +449,8 @@ class FrontYardWatered extends PNGRoom {
 	draw() {
 		super.draw();
 
-		//check if dirty and finished water task
+		//check if dirty level is greater than 1 and finished water task to show 
+		// the state where dome houses are underwater due the water level rising. 
 		if (dirtyLevel > 1) {
 			if(goHome){
 				adventureManager.changeState("FrontYardDirtyAfter");
@@ -465,6 +502,8 @@ class Kitchen extends PNGRoom {
 			drawSprite(this.box);
 			playerSprite.overlap(this.box, pickUp);
 		}
+		//reveal dirty text when earth gets dirtier
+		dirtyText();
 	}
 }
 
@@ -479,6 +518,12 @@ class LivingRoom extends PNGRoom {
   		this.door2.addAnimation('door', loadAnimation('assets/Door.png'));
 
 	}
+
+	unload() {
+		super.unload();
+		earthText =" ";
+	}
+
 	draw() {
 		super.draw();
 		//draw door sprite
@@ -488,6 +533,8 @@ class LivingRoom extends PNGRoom {
 		//check for overlap with door and main character and switch to next state when collided
 		playerSprite.overlap(this.door,doorCollide);
 		playerSprite.overlap(this.door2,doorCollide2);
+		//reveal dirty text when earth gets dirtier
+		dirtyText();
 
 	}
 }
@@ -503,6 +550,11 @@ class Hallway extends PNGRoom {
   		this.door2.addAnimation('door', loadAnimation('assets/Door.png'));
 	}
 
+	unload() {
+		super.unload();
+		earthText =" ";
+	}
+
 	draw() {
 		super.draw();
 		//draw door sprite
@@ -512,7 +564,8 @@ class Hallway extends PNGRoom {
 		//check for overlap with door and main character and switch to next state when collided
 		playerSprite.overlap(this.door,doorCollide);
 		playerSprite.overlap(this.door2,doorCollide2);
-
+		//reveal dirty text when earth gets dirtier
+		dirtyText();
 	}
 }
 
@@ -535,6 +588,28 @@ class EarthRoom extends PNGRoom {
 	}
 }
 
+class BobRoom extends PNGRoom {
+	preload() { 
+
+		//creat AC controler sprite for collison
+	  	this.controler = createSprite(770, 533, 84, 15);
+  		this.controler.addAnimation('controler', loadAnimation('assets/Controler.png'));
+	}
+
+	unload() {
+		super.unload();
+		earthText =" ";
+	}
+
+	draw() {
+		super.draw();
+		//draw controler sprite
+		drawSprite(this.controler);
+		//check for overlap with door and main character and switch to next state when collided
+		playerSprite.overlap(this.contr,controlerCollide);
+	}
+}
+
 class MomRoom extends PNGRoom {
 	load() {
 		//superclass 
@@ -554,6 +629,7 @@ class MomRoom extends PNGRoom {
 		earthText =" ";
 	}
 }
+
 class BackyardRecycle extends PNGRoom {
 	preload() { 
 		//recycle bin sprite for collison
@@ -614,9 +690,10 @@ class BackyardLandfill extends PNGRoom {
 
 class MirrorClean extends PNGRoom {
 	draw () { 
+		//check dirty level and change state of the mirror appropriately
 		super.draw();
 		if (dirtyLevel ==0 ) {
-  		adventureManager.changeState("MirrorClean");
+  			adventureManager.changeState("MirrorClean");
   		}
   		else if (dirtyLevel ==1 ) {
   			adventureManager.changeState("MirrorDirty1");
@@ -626,9 +703,10 @@ class MirrorClean extends PNGRoom {
   		}
 	}
 }
+
 class Note extends PNGRoom {
 	load() {
-		//superclass 
+		//check which tasks are done and show appropriate text
 		super.load();
 		if (water == false){
 			earthText = "Okay I have to do all of these tasks. Maybe I can start by watering the front yard";
@@ -636,8 +714,11 @@ class Note extends PNGRoom {
 		else if (trash == false ) {
 			earthText = "1 is done. So I guess I can move on to chore number 2."; 
 		}
-		else {
+		else if (checkBob == false) {
 			earthText = "One more task to do! Hope Bob isn't doing anything bad...";
+		}
+		else {
+			earthText = "Yay! I finsihed everything";
 		}
 	}
 
@@ -650,5 +731,25 @@ class Note extends PNGRoom {
 		super.draw();
 		fill (0,128,0);
 		checkmark();
+	}
+}
+
+class AC extends PNGRoom {
+
+	load() {
+		super.load();
+		//font for AC number 
+		digitalFont = loadFont('fonts/DS-DIGI.ttf');
+		//opening text when AC state opens 
+		earthText = "OMG! The AC temperature is too low! It just needs to be at 72F to stay comfortable. I will raise it up.";
+	}
+
+	unload() {
+		super.unload();
+		earthText =" ";
+	}
+	draw() {
+		//reveal appropriate temperature digit
+		temperature();
 	}
 }
