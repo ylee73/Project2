@@ -437,9 +437,11 @@ function checkmark() {
 
 function temperature() {
 	//change text setting for temperature number
+	push();
 	textFont(digitalFont);
 	textSize(130);
-	text(tempNumb, 550, 200);
+	text(tempNumb, 550, 230);
+	pop();
 	//check if tempNumb is 72 
 	if (tempNumb == 72) {
 		//change earth text and update the status of the check bob task
@@ -453,6 +455,7 @@ function talkBob() {
 	image(bobImage, 73,570);
 	//display first message when collided
 	earthText = "Let me be! Climate change is not true. Just let me enjoy my AC!"
+	earthImage.visible =false;
 }
 
 //______________Subclasses_________________//
@@ -607,6 +610,15 @@ class Hallway extends PNGRoom {
 		playerSprite.overlap(this.door2,doorCollide2);
 		//reveal dirty text when earth gets dirtier
 		dirtyText();
+		//ending state where mom comes in
+		if (trash == true && water ==true && checkBob == true) {
+			momSpeaking = true;
+			if (dirtyLevel == 0) {
+			}
+			else {
+				
+			}
+		}
 	}
 }
 
@@ -663,6 +675,7 @@ class BobRoom extends PNGRoom {
 		playerSprite.overlap(this.controler,controlerCollide);
 		//draw Bob sprite
 		drawSprite(this.bobNPC);
+		//check for overlap with Bob and main character
 		playerSprite.overlap(this.bobNPC, talkBob);
 	}
 }
