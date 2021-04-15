@@ -50,6 +50,12 @@ var textBoxHeight = 70;
 var earthText = " ";
 var earthImage;
 var bobImage;
+var momImageHappy;
+var momImageSad;
+
+//Map of house
+var mapImage;
+var showMap = false;
 
 
 //Chores varaibles
@@ -60,11 +66,10 @@ var dirtyLevel = 0;
 
 //Logistics varaibles
 var notSeeNote = true; //check if user saw mom's note
-var preivousState;
 var goHome = false; //check if user went home
 var textDirty1 = false; //check if earth got dirtier and reveal mirror text 
-var textDirty1 = false; 
-var tempNumb = 68;
+var textDirty2 = false; //check if earth got dirtier and reveal mirror text 
+var tempNumb = 68; //initial temp setup 
 var digitalFont;
 var talkImage = null; //check if image is other than main player 
 
@@ -78,10 +83,8 @@ function preload(){
 	earthImage = loadImage('assets/EarthText.png');
 	earthImageDirty1 = loadImage('assets/earthImage_dirty1.png');
 	earthImageDirty2 = loadImage('assets/earthImage_dirty2.png');
-	
-	//add Mom image 
-	momImageHappy = loadImage('assets/momHappy.png');
-	momImageSad = loadImage('assets/momSad.png');
+	//load map image
+	mapImage = loadImage('assets/Map.png');
 }
 
 // Setup code 
@@ -108,7 +111,7 @@ function setup() {
   //load images and use state and interaction tables
   adventureManager.setup();
 
-  adventureManager.changeState("Earth'sRoom");
+  adventureManager.changeState("IntroScreen");
 
   //call function to setup additional information about clickables
   setupClickables();
@@ -150,15 +153,26 @@ function draw() {
   	//earth text 
  	text(earthText, 268, 590, textBoxWidth, textBoxHeight);
 
+ 	//no image of speaker
+ 	if (adventureManager.getStateName() !== "IntroScreen" && 
+ 		adventureManager.getStateName() !== "Instructions") {
  	//draw image of earth after checking the dirty level
-	drawTalkImage();
+		drawTalkImage();
+ 	}
 
-  //record state 
-  previousState = adventureManager.getStateName;
+ //show map image when "m" is pressed
+ 	if (showMap) {
+ 		image(mapImage, 974, 26);
+ 	}
 }
 
 function keyPressed() {
 	adventureManager.keyPressed(key);
+	//check if m is pressed 
+	if (key === "m") {
+		showMap =!showMap; // flips from false to true and vice-versa
+	}
+
 }
 
 function mouseReleased() {
@@ -216,8 +230,14 @@ clickableButtonHover = function() {
 }
 //Light gray
  clickableButtonOnOutside = function () {
-  // backto our gray color
+  // back to our gray color
   this.color = "#ffffff";
+  if (adventureManager.getStateName() == "IntroScreen" || adventureManager.getStateName() == "Instructions"){
+  	this.textSize = 30;
+  }
+  else {
+  	this.textSize =14;
+  }
 } 
 
 clickableButtonPressed = function() {
@@ -350,10 +370,10 @@ function dirtyText() {
 			textDirty1 = true; 
 		}
 	}
-	else if (dirtyLevel == 2) {
-		if (textDirty1 == false) {
+	else if (dirtyLevel > 1) {
+		if (textDirty2 == false) {
 		earthText = "Oh not I got even dirtier! Let's go to the bathroom to check the mirror.";			
-		textDirty1 = true; 
+		textDirty2 = true; 
 		}
 	}
 
@@ -370,7 +390,7 @@ function imageCheck() {
 		//draw image of earth dirty 1
 		image(earthImageDirty1,73, 570);
 	}
-	else if (dirtyLevel == 2) {
+	else {
 		//draw image of earth dirty 2
 		image(earthImageDirty2, 73, 570);
 	}
@@ -405,7 +425,7 @@ function noteRead() {
 //pick up box to do the chore
 function pickUp() {
 	//set text for trash task
-	earthText = "Let's throw this box away. But in which bin am I supposedto throw this in?";
+	earthText = "Let's throw this box away. But in which bin am I supposed to throw this in?";
 
 	//turn clickables on
 	clickables[5].visible = true;
@@ -596,6 +616,25 @@ class Hallway extends PNGRoom {
   		//create door spirte for top door collison
   		this.door2 = createSprite(440, 0, 240, 20);
   		this.door2.addAnimation('door', loadAnimation('assets/Door.png'));
+
+  		//add Mom image 
+		momImageHappy = loadImage('assets/momHappy.png');
+		momImageSad = loadImage('assets/momSad.png');
+
+	}
+
+	load() {
+		super.load();
+		if (trash == true && water ==true && checkBob == true) {
+			if (dirtyLevel == 0) {
+				earthText = "Guys I am back~ Earth! Great job with keeping our earth clean! Play again if you want to see different endings."
+			}
+			else {
+				talkImage = momImageSad;
+				earthText = "I am back~ Earth! Why are you so dirty! We have to keep our earth clean! Play again and keep our earth clean."
+				
+			}
+		}
 	}
 
 	unload() {
@@ -614,13 +653,14 @@ class Hallway extends PNGRoom {
 		playerSprite.overlap(this.door2,doorCollide2);
 		//reveal dirty text when earth gets dirtier
 		dirtyText();
-		//ending state where mom comes in
+
+		//ending with mom text
 		if (trash == true && water ==true && checkBob == true) {
-			momSpeaking = true;
 			if (dirtyLevel == 0) {
+				talkImage = momImageHappy;
 			}
 			else {
-				
+				talkImage = momImageSad;	
 			}
 		}
 	}
@@ -765,20 +805,24 @@ class BackyardLandfill extends PNGRoom {
 		drawSprite(this.landfill);
 		//checkoverlap
 		playerSprite.overlap(this.landfill,landfillCollide);
+		imageCheck();
 	}
 }
 
 class MirrorClean extends PNGRoom {
-	draw () { 
+	draw () {
 		//check dirty level and change state of the mirror appropriately
 		super.draw();
+
+		print(dirtyLevel);
+
 		if (dirtyLevel ==0 ) {
   			adventureManager.changeState("MirrorClean");
   		}
   		else if (dirtyLevel ==1 ) {
   			adventureManager.changeState("MirrorDirty1");
   		}
-  		else if (dirtyLevel ==2 ) {
+  		else {
   			adventureManager.changeState("MirrorDirty2");
   		}
 	}
@@ -789,7 +833,7 @@ class Note extends PNGRoom {
 		//check which tasks are done and show appropriate text
 		super.load();
 		if (water == false){
-			earthText = "Okay I have to do all of these tasks. Maybe I can start by watering the front yard";
+			earthText = "Okay I have to do all of these tasks. Maybe I can start by watering the front yard.";
 		}
 		else if (trash == false ) {
 			earthText = "1 is done. So I guess I can move on to chore number 2."; 
@@ -798,7 +842,7 @@ class Note extends PNGRoom {
 			earthText = "One more task to do! Hope Bob isn't doing anything bad...";
 		}
 		else {
-			earthText = "Yay! I finished everything";
+			earthText = "Yay! I finished everything. Let's go to the hallway and see if mom is here.";
 		}
 	}
 

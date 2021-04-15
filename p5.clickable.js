@@ -69,7 +69,7 @@ function Clickable() {
 	this.stroke = "#000000";	//Border color of the clickable
 	this.text = "Press Me";		//Text of the clickable
 	this.textColor = "#000000";	//Color for the text shown
-	this.textSize = 12;		//Size for the text shown
+	this.textSize = 14;		//Size for the text shown
 	this.textFont = "sans-serif";	//Font for the text shown
 	this.textScaled = false;     //Scale the text with the size of the clickable
 	
