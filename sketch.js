@@ -53,6 +53,13 @@ var bobImage;
 var momImageHappy;
 var momImageSad;
 
+//Sound
+var sprinklerSound = null;
+var waterSound = null;
+var clickSound = null;
+var completeSound = null;
+var doorSound =null;
+
 //Map of house
 var mapImage;
 var showMap = false;
@@ -85,6 +92,13 @@ function preload(){
 	earthImageDirty2 = loadImage('assets/earthImage_dirty2.png');
 	//load map image
 	mapImage = loadImage('assets/Map.png');
+
+	//load sound
+	sprinklerSound = loadSound('sound/sprinkler.wav');
+	waterSound = loadSound('sound/water.wav');
+	clickSound = loadSound('sound/click.wav');
+	completeSound = loadSound('sound/complete.wav');
+	doorSound = loadSound('sound/door.wav');
 }
 
 // Setup code 
@@ -243,6 +257,9 @@ clickableButtonHover = function() {
 clickableButtonPressed = function() {
   //change state accordingly
   if (this.id === homeIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name); 
   	//reposition
   	playerSprite.position.x = 460;
@@ -252,28 +269,52 @@ clickableButtonPressed = function() {
 	goHome = true; 
   }
   else if (this.id ===landfillIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
   	//reposition sprite
   	playerSprite.position.x = 80;
 	playerSprite.position.y = 40;
   }
   else if (this.id ===recycleIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
   	//reposition sprite
   	playerSprite.position.x = 80;
 	playerSprite.position.y = 40;
   }
   else if (this.id ===startIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
   }
   else if (this.id ===instructionsIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
   }
   else if (this.id ===sprinklerIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
+
+  	//play sprinkler sound
+  	sprinklerSound.play();
   }
   else if (this.id ===handSprinklerIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
+
+  	//play water sound
+  	waterSound.play();
   }
   else if (this.id ===nextSIndex) {
   	adventureManager.clickablePressed(this.name);
@@ -281,37 +322,57 @@ clickableButtonPressed = function() {
   	dirtyLevel = dirtyLevel +1
   	//finished water chore
   	water = true;
+  	//play complete sound
+  	completeSound.play();
 
-  	print(dirtyLevel);
-  	print(water);
+
   }
   else if (this.id ===nextHIndex) {
   	adventureManager.clickablePressed(this.name);
   	//finished water chore
   	water = true;
+  	//play complete sound
+  	completeSound.play();
   }
   else if (this.id ===backIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
   	//saw note
   	notSeeNote = false;
-  	print(notSeeNote);
   	//reposition
   	playerSprite.position.x = 520;
 	playerSprite.position.y = 130;
   }
   else if (this.id ===mirrorIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
   }
   else if (this.id ===backCIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
   }
   else if (this.id ===backD1Index) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
   }
   else if (this.id ===backD2Index) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
   }
   else if (this.id ===homeWIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
 
   	//reposition
@@ -320,12 +381,21 @@ clickableButtonPressed = function() {
 
   }
   else if (this.id ===downButtonIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	tempNumb = tempNumb -1; 
   }
   else if (this.id ===upButtonIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	tempNumb = tempNumb +1; 
   }
   else if (this.id ===backACIndex) {
+  	//play click sound
+  	clickSound.play();
+
   	adventureManager.clickablePressed(this.name);
   	//reposition player 
   	playerSprite.position.x = 784;
@@ -433,12 +503,20 @@ function pickUp() {
 
 }
 function recycleCollide() {
+	if (trash == false) {
+		//play complete sound
+  		completeSound.play();
+	}
 	//trash chore completed
 	trash = true;
 	//earth text after throwing the trash away 
 	earthText = "Into the Recycling bin it goes. Let's go back to the Kitchen.";
 }
 function landfillCollide() {
+	if (trash == false) {
+		//play complete sound
+  		completeSound.play();
+	}
 	//trash chore completed
 	trash = true;
 	//gets dirtier
@@ -469,6 +547,10 @@ function temperature() {
 	pop();
 	//check if tempNumb is 72 
 	if (tempNumb == 72) {
+		if (checkBob == false) {
+			//play complete sound
+  			completeSound.play();
+		}
 		//change earth text and update the status of the check bob task
 		earthText = "Okay we are good now. I think I am done checking up on Bob and solving his issue." 
 		checkBob = true; 
@@ -662,6 +744,8 @@ class Hallway extends PNGRoom {
 			else {
 				talkImage = momImageSad;	
 			}
+			// play door sound
+			doorSound.play();
 		}
 	}
 }
