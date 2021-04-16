@@ -402,7 +402,7 @@ clickableButtonPressed = function() {
 	playerSprite.position.y = 404;
   }
 }
-
+//When playerSprite collide with the down door
 function doorCollide() {
 	if (adventureManager.getStateName() == "Kitchen") {
 		adventureManager.changeState("LivingRoom");
@@ -425,6 +425,7 @@ function doorCollide() {
 	playerSprite.position.y = 90;
 }
 
+//when playerSprite collide with the AC controler 
 function controlerCollide() {
 	//change state to AC when collide
 	if(adventureManager.getStateName() == "Bob'sRoom") {
@@ -432,6 +433,7 @@ function controlerCollide() {
 	}
 }
 
+//wheck the dirty level of the player and display appropriate text 
 function dirtyText() {
 //lead user to the bathroom when earth gets to dirty level 1
 	if (dirtyLevel == 1) {
@@ -446,10 +448,9 @@ function dirtyText() {
 		textDirty2 = true; 
 		}
 	}
-
 }
 
-//check dirty level of earth 
+//check dirty level of earth and display appropriate image for textimage
 function imageCheck() { 
 
 	if (dirtyLevel == 0) {
@@ -466,6 +467,7 @@ function imageCheck() {
 	}
 }
 
+//drawTalkImage of earth when null and image of Bob or Mom when they are speaking
 function drawTalkImage() {
 	if (talkImage === null) {
 		//draw image of earth
@@ -487,12 +489,13 @@ function doorCollide2() {
 	playerSprite.position.x = 400;
 	playerSprite.position.y = 480;
 }
+//move state to Note
 function noteRead() {
 	adventureManager.changeState("Note"); 
 	notSeeNote = false; 
 }
 
-//pick up box to do the chore
+//pick up box and display options of throwing it away
 function pickUp() {
 	//set text for trash task
 	earthText = "Let's throw this box away. But in which bin am I supposed to throw this in?";
@@ -500,8 +503,9 @@ function pickUp() {
 	//turn clickables on
 	clickables[5].visible = true;
 	clickables[6].visible = true;
-
 }
+
+//when put box in recycling bin
 function recycleCollide() {
 	if (trash == false) {
 		//play complete sound
@@ -512,6 +516,8 @@ function recycleCollide() {
 	//earth text after throwing the trash away 
 	earthText = "Into the Recycling bin it goes. Let's go back to the Kitchen.";
 }
+
+//when put box in landfill bin 
 function landfillCollide() {
 	if (trash == false) {
 		//play complete sound
@@ -538,6 +544,7 @@ function checkmark() {
 		}
 }
 
+//AC task in Bob's room 
 function temperature() {
 	//change text setting for temperature number
 	push();
@@ -557,6 +564,7 @@ function temperature() {
 	}
 }
 
+//Bob NPC text and image display
 function talkBob() {
 	//set talkImage to bobImage
 	talkImage =bobImage;
@@ -584,7 +592,7 @@ class FrontYardBefore extends PNGRoom {
 	draw() {
 		super.draw();
 
-		//check if watered and show appropriate button and text
+		//check if watered and show appropriate buttons
 		if (water) {
 			clickables[3].visible = false;
 			clickables[4].visible = false;
@@ -707,6 +715,7 @@ class Hallway extends PNGRoom {
 
 	load() {
 		super.load();
+		//check if all the tasks are completed and display text for mom
 		if (trash == true && water ==true && checkBob == true) {
 			if (dirtyLevel == 0) {
 				earthText = "Guys I am back~ Earth! Great job with keeping our earth clean! Play again if you want to see different endings."
@@ -714,7 +723,6 @@ class Hallway extends PNGRoom {
 			else {
 				talkImage = momImageSad;
 				earthText = "I am back~ Earth! Why are you so dirty! We have to keep our earth clean! Play again and keep our earth clean."
-				
 			}
 		}
 	}
@@ -758,10 +766,12 @@ class EarthRoom extends PNGRoom {
 		if (notSeeNote) {
 			earthText = "Time to rise and shine! I wonder if Mom is awake. Let's go to her room";
 		}
+		//text if already saw mom's note 
 		else {
 			earthText = "I should always remember to keep myself clean.";
 		}
 	}
+
 	unload() {
 		super.unload();
 
@@ -784,6 +794,7 @@ class BobRoom extends PNGRoom {
 	load() {
 		super.load()
 		
+		//check if AC task is completed 
 		if (checkBob == false) {
 			earthText = "Ah it is so cold in here! Let me check the remote next to the AC.";
 		}
@@ -856,7 +867,6 @@ class BackyardRecycle extends PNGRoom {
 		super.draw();
 
 		moveSprite();
-		
 		//draw recycle bin sprite
 		drawSprite(this.recycle);
 		//checkoverlap
@@ -897,8 +907,6 @@ class MirrorClean extends PNGRoom {
 	draw () {
 		//check dirty level and change state of the mirror appropriately
 		super.draw();
-
-		print(dirtyLevel);
 
 		if (dirtyLevel ==0 ) {
   			adventureManager.changeState("MirrorClean");
