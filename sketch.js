@@ -1,9 +1,15 @@
 /***********************************************************************************
-  Project2
+  Save Earth (Project2)
   by Ashley Lee
 
-  Use the p5.play.js library to create a basic map of the game with 
-  moving playerSprite. 
+ This is the files using p5.play.js and p5.2DAdventure.js libraries to create a 
+ social justice game revolved around the topic of global warming and saving the environment. 
+ The game is a RPF style game where the main character, Earth, has to complete the chores 
+ that his mom left him while keeping the earth clean. The user will navigate the house 
+ using the arrow keyboards and use clickable buttons to select the best method to complete 
+ the tasks. Every time the user chooses the non-environmentally friendly option, there will be 
+ a signal that global warming is negatively affecting the environment and the main character 
+ will get dirtier. 
 
 ------------------------------------------------------------------------------------
 	To use:
@@ -77,13 +83,11 @@ var goHome = false; //check if user went home
 var textDirty1 = false; //check if earth got dirtier and reveal mirror text 
 var textDirty2 = false; //check if earth got dirtier and reveal mirror text 
 var tempNumb = 68; //initial temp setup 
-var digitalFont;
+var digitalFont; //font for AC task
 var talkImage = null; //check if image is other than main player 
 
-
-
-//load adventure manager with states and interacions tables
 function preload(){
+	//load adventure manager with states and interacions tables
 	clickablesManager = new ClickableManager('data/clickableLayout.csv');
 	adventureManager = new AdventureManager('data/adventureStates.csv', 'data/interactionTable.csv', 'data/clickableLayout.csv');
 	//add earth image
@@ -92,7 +96,6 @@ function preload(){
 	earthImageDirty2 = loadImage('assets/earthImage_dirty2.png');
 	//load map image
 	mapImage = loadImage('assets/Map.png');
-
 	//load sound
 	sprinklerSound = loadSound('sound/sprinkler.wav');
 	waterSound = loadSound('sound/water.wav');
@@ -167,7 +170,7 @@ function draw() {
   	//earth text 
  	text(earthText, 268, 590, textBoxWidth, textBoxHeight);
 
- 	//no image of speaker
+ 	//no image of speaker in intro and instructions state
  	if (adventureManager.getStateName() !== "IntroScreen" && 
  		adventureManager.getStateName() !== "Instructions") {
  	//draw image of earth after checking the dirty level
@@ -186,7 +189,6 @@ function keyPressed() {
 	if (key === "m") {
 		showMap =!showMap; // flips from false to true and vice-versa
 	}
-
 }
 
 function mouseReleased() {
@@ -246,20 +248,20 @@ clickableButtonHover = function() {
  clickableButtonOnOutside = function () {
   // back to our gray color
   this.color = "#ffffff";
+  //increase button text font in intro and instructions state 
   if (adventureManager.getStateName() == "IntroScreen" || adventureManager.getStateName() == "Instructions"){
   	this.textSize = 30;
   }
   else {
-  	this.textSize =14;
+  	this.textSize = 14;
   }
 } 
 
 clickableButtonPressed = function() {
-  //change state accordingly
   if (this.id === homeIndex) {
   	//play click sound
   	clickSound.play();
-
+  	 //change state accordingly to button
   	adventureManager.clickablePressed(this.name); 
   	//reposition
   	playerSprite.position.x = 460;
@@ -324,8 +326,6 @@ clickableButtonPressed = function() {
   	water = true;
   	//play complete sound
   	completeSound.play();
-
-
   }
   else if (this.id ===nextHIndex) {
   	adventureManager.clickablePressed(this.name);
@@ -375,7 +375,7 @@ clickableButtonPressed = function() {
 
   	adventureManager.clickablePressed(this.name);
 
-  	//reposition
+  	//reposition player
   	playerSprite.position.x = 460;
 	playerSprite.position.y = 480;
 
@@ -402,6 +402,7 @@ clickableButtonPressed = function() {
 	playerSprite.position.y = 404;
   }
 }
+//___________Functions for Game Logistics___________//
 //When playerSprite collide with the down door
 function doorCollide() {
 	if (adventureManager.getStateName() == "Kitchen") {
@@ -418,7 +419,6 @@ function doorCollide() {
 		//if water task is not done
 		else {
 			adventureManager.changeState("FrontYardBefore");
-
 		}
 	}
 	playerSprite.position.x = 400;
@@ -435,7 +435,7 @@ function controlerCollide() {
 
 //wheck the dirty level of the player and display appropriate text 
 function dirtyText() {
-//lead user to the bathroom when earth gets to dirty level 1
+//lead user to the bathroom when earth gets dirtier
 	if (dirtyLevel == 1) {
 		if (textDirty1 == false) {
 			earthText = "Oh no I think I got dirtier! Let's go to the bathroom to check the mirror.";
@@ -452,7 +452,6 @@ function dirtyText() {
 
 //check dirty level of earth and display appropriate image for textimage
 function imageCheck() { 
-
 	if (dirtyLevel == 0) {
 		//draw image of earth clean
 		image(earthImage, 73,570);
@@ -489,18 +488,19 @@ function doorCollide2() {
 	playerSprite.position.x = 400;
 	playerSprite.position.y = 480;
 }
+
 //move state to Note
 function noteRead() {
 	adventureManager.changeState("Note"); 
 	notSeeNote = false; 
 }
 
-//pick up box and display options of throwing it away
+//pick up box and display options on how to throw it away
 function pickUp() {
 	//set text for trash task
 	earthText = "Let's throw this box away. But in which bin am I supposed to throw this in?";
 
-	//turn clickables on
+	//turn clickables on for "recycle" and "landfill"
 	clickables[5].visible = true;
 	clickables[6].visible = true;
 }
@@ -606,9 +606,8 @@ class FrontYardBefore extends PNGRoom {
 class FrontYardWatered extends PNGRoom {
 	draw() {
 		super.draw();
-
 		//check if dirty level is greater than 1 and finished water task to show 
-		// the state where dome houses are underwater due the water level rising. 
+		//the state where houses are underwater due the water level rising. 
 		if (dirtyLevel > 1) {
 			if(goHome){
 				adventureManager.changeState("FrontYardDirtyAfter");
@@ -620,7 +619,6 @@ class FrontYardWatered extends PNGRoom {
 
 class Kitchen extends PNGRoom {
 	preload() { 
-
 		//creat door sprite for collison
 	  	this.door = createSprite(440, 540, 240, 20);
   		this.door.addAnimation('door', loadAnimation('assets/Door.png'));
@@ -632,7 +630,6 @@ class Kitchen extends PNGRoom {
   		//create box sprite for trash chore
   		this.box = createSprite(905, 463, 48, 33);
   		this.box.addAnimation('box', loadAnimation('assets/box.png'));
-
 	}
 
 	unload() {
@@ -667,14 +664,12 @@ class Kitchen extends PNGRoom {
 
 class LivingRoom extends PNGRoom {
 	preload() { 
-
 		//creat door sprite for bottom door collison
 	  	this.door = createSprite(440, 540, 240, 20);
   		this.door.addAnimation('door', loadAnimation('assets/Door.png'));
   		//create door spirte for top door collison
   		this.door2 = createSprite(440, 0, 240, 20);
   		this.door2.addAnimation('door', loadAnimation('assets/Door.png'));
-
 	}
 
 	unload() {
@@ -699,7 +694,6 @@ class LivingRoom extends PNGRoom {
 
 class Hallway extends PNGRoom {
 	preload() { 
-
 		//creat door sprite for collison
 	  	this.door = createSprite(440, 540, 240, 20);
   		this.door.addAnimation('door', loadAnimation('assets/Door.png'));
@@ -710,7 +704,6 @@ class Hallway extends PNGRoom {
   		//add Mom image 
 		momImageHappy = loadImage('assets/momHappy.png');
 		momImageSad = loadImage('assets/momSad.png');
-
 	}
 
 	load() {
@@ -761,7 +754,6 @@ class Hallway extends PNGRoom {
 class EarthRoom extends PNGRoom {
 	load() { 
 		super.load();
-
 		//check is use saw mom's note
 		if (notSeeNote) {
 			earthText = "Time to rise and shine! I wonder if Mom is awake. Let's go to her room";
@@ -781,7 +773,6 @@ class EarthRoom extends PNGRoom {
 
 class BobRoom extends PNGRoom {
 	preload() { 
-
 		//creat AC controler sprite for collison
 	  	this.controler = createSprite(800, 533, 84, 15);
   		this.controler.addAnimation('controler', loadAnimation('assets/Controler.png'));
@@ -793,7 +784,6 @@ class BobRoom extends PNGRoom {
 
 	load() {
 		super.load()
-		
 		//check if AC task is completed 
 		if (checkBob == false) {
 			earthText = "Ah it is so cold in here! Let me check the remote next to the AC.";
@@ -829,7 +819,6 @@ class MomRoom extends PNGRoom {
 	load() {
 		//superclass 
 		super.load();
-
 		//check is use saw mom's note
 		if (notSeeNote) {
 			earthText = "She is not here? Maybe she went out already. I wonder if she wrote a note for me on the fridge."
@@ -865,7 +854,6 @@ class BackyardRecycle extends PNGRoom {
 
 	draw() {
 		super.draw();
-
 		moveSprite();
 		//draw recycle bin sprite
 		drawSprite(this.recycle);
@@ -880,6 +868,7 @@ class BackyardLandfill extends PNGRoom {
 	  	this.landfill = createSprite(830, 210, 67, 97);
   		this.landfill.addAnimation('landfill', loadAnimation('assets/Landfill.png'));
 	}
+
 	load() {
 		//superclass 
 		super.load();
@@ -963,6 +952,7 @@ class AC extends PNGRoom {
 		super.unload();
 		earthText =" ";
 	}
+
 	draw() {
 		super.draw();
 		//reveal appropriate temperature digit
