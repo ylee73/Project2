@@ -1,4 +1,4 @@
-## Save Eart (Project 2 )for P5.js
+## Save Earth (Project 2 )for P5.js
 #### by Ashley Lee
 
 
