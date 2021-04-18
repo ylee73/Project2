@@ -64,7 +64,6 @@ var sprinklerSound = null;
 var waterSound = null;
 var clickSound = null;
 var completeSound = null;
-var doorSound =null;
 
 //Map of house
 var mapImage;
@@ -101,7 +100,6 @@ function preload(){
 	waterSound = loadSound('sound/water.wav');
 	clickSound = loadSound('sound/click.wav');
 	completeSound = loadSound('sound/complete.wav');
-	doorSound = loadSound('sound/door.wav');
 }
 
 // Setup code 
@@ -745,8 +743,6 @@ class Hallway extends PNGRoom {
 			else {
 				talkImage = momImageSad;	
 			}
-			// play door sound
-			doorSound.play();
 		}
 	}
 }
@@ -837,7 +833,7 @@ class MomRoom extends PNGRoom {
 class BackyardRecycle extends PNGRoom {
 	preload() { 
 		//recycle bin sprite for collison
-	  	this.recycle = createSprite(830, 210, 67, 97);
+	  	this.recycle = createSprite(840, 210, 67, 97);
   		this.recycle.addAnimation('recycle', loadAnimation('assets/Recycle.png'));
 	}
 
@@ -865,7 +861,7 @@ class BackyardRecycle extends PNGRoom {
 class BackyardLandfill extends PNGRoom {
 	preload() { 
 		//recycle bin sprite for collison
-	  	this.landfill = createSprite(830, 210, 67, 97);
+	  	this.landfill = createSprite(840, 210, 67, 97);
   		this.landfill.addAnimation('landfill', loadAnimation('assets/Landfill.png'));
 	}
 
