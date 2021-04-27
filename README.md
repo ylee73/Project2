@@ -24,3 +24,6 @@ The unload() will set the earthText back to an empty string when leaving the sta
 
 ### Adobe XD
 [Link to XD](https://xd.adobe.com/view/debe4d43-600d-4288-9273-d20e82acb376-8bed/) 
+
+### Link to Play the Game
+[Click to Play](https://xarts.usfca.edu/~ylee73/Project2/) 
