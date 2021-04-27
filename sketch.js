@@ -424,6 +424,9 @@ clickableButtonPressed = function() {
   	//computer task is done 
   	computerTask = true; 
   	adventureManager.clickablePressed(this.name);
+  	//reposition
+  	playerSprite.position.x = 190;
+	playerSprite.position.y = 390;
   }
 }
 //___________Functions for Game Logistics___________//
@@ -637,10 +640,10 @@ class FrontYardWatered extends PNGRoom {
 		//check if dirty level is greater than 1 and finished water task to show 
 		//the state where houses are underwater due the water level rising. 
 		if (homeTask) {
-			clickable[0].visiable = false;
+			clickables[0].visiable = false;
 		}
 		else {
-			clickable[18].visiable = false;
+			clickables[18].visiable = false;
 		}
 	}
 

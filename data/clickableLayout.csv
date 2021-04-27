@@ -19,7 +19,7 @@ ID,Name,State,PNGFilename,Text,x,y,width,height
 17,BackAC,AC,,Back,1021,609,100,50
 18,Outside,FrontYardWatered,,Outside,1051,609,100,50
 19,Email,ComputerStart,assets/email.png,,730,433,70,52
-20,Delete,ComputerEmail,assets/Delete.png,,540,108,20,29
+20,Delete,ComputerEmail,assets/Delete.png,,540,100,20,29
 21,Exit,ComputerClean,,Exit,1021,609,100,50
 22,StoreBag,Ms.Sweat,,Store Bag,900,609,100,50
 23,RecycleBag,Ms.Sweat,assets/bag.png,,1051,579,78,92

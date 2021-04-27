@@ -44,4 +44,5 @@ MarketOutside,,,,,W,Outside
 MarketInside,,,,,W,MarketOutside
 ComputerStart,,,,Email,,ComputerEmail
 ComputerEmail,,,,Delete,,ComputerClean
+ComputerClean,,,,Exit,,Earth'sRoom
 FrontYardWatered,,,,Outside,,Outside
