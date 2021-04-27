@@ -33,3 +33,15 @@ MirrorDirty2,,,,BackD2,,Bathroom
 FrontYardWatered,,,,HomeW,,Hallway
 FrontYardDirtyAfter,,,,HomeD,,Hallway
 AC,,,,BackAC,,Bob'sRoom
+Outside,,,,,E,MarketOutside
+Outside,,,,,W,Cross
+Cross,,,,,W,Mr.Beach
+Cross,,,,,E,Outside
+Cross,,,,,N,Ms.Sweat
+Mr.Beach,,,,,E,Cross
+Mr.BeachWater,,,,,E,Cross
+MarketOutside,,,,,W,Outside
+MarketInside,,,,,W,MarketOutside
+ComputerStart,,,,Email,,ComputerEmail
+ComputerEmail,,,,Delete,,ComputerClean
+FrontYardWatered,,,,Outside,,Outside

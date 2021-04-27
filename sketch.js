@@ -49,6 +49,9 @@ var homeWIndex =14;
 var downButtonIndex =15; 
 var upButtonIndex =16; 
 var backACIndex =17; 
+var emailIndex =19;
+var deleteIndex =20;
+var exitIndex =21;
 
 //Speaking Textbox + character image
 var textBoxWidth = 645;
@@ -75,9 +78,12 @@ var water = false;
 var checkBob = false;
 var trash = false; 
 var dirtyLevel = 0;
+var homeTask = false;
+var neighbor = false; 
 
 //Logistics varaibles
 var notSeeNote = true; //check if user saw mom's note
+var computerTask = false; //check if user compeleted the email task
 var goHome = false; //check if user went home
 var textDirty1 = false; //check if earth got dirtier and reveal mirror text 
 var textDirty2 = false; //check if earth got dirtier and reveal mirror text 
@@ -153,7 +159,10 @@ function draw() {
   	adventureManager.getStateName() !== "MirrorDirty2" &&
   	adventureManager.getStateName() !== "MirrorClean" &&
   	adventureManager.getStateName() !== "Note" &&
-  	adventureManager.getStateName() !== "AC") {
+  	adventureManager.getStateName() !== "AC" &&
+  	adventureManager.getStateName() !== "ComputerStart" &&
+  	adventureManager.getStateName() !== "ComputerEmail" &&
+  	adventureManager.getStateName() !== "ComputerClean") {
   	//responds to keydowns
   	moveSprite();
 
@@ -399,6 +408,23 @@ clickableButtonPressed = function() {
   	playerSprite.position.x = 784;
 	playerSprite.position.y = 404;
   }
+  else if (this.id ===emailIndex) {
+  	//play click sound
+  	clickSound.play();
+  	adventureManager.clickablePressed(this.name);
+  }
+  else if (this.id ===deleteIndex) {
+  	//play click sound
+  	clickSound.play();
+  	adventureManager.clickablePressed(this.name);
+  }
+  else if (this.id ===exitIndex) {
+  	//play click sound
+  	clickSound.play();
+  	//computer task is done 
+  	computerTask = true; 
+  	adventureManager.clickablePressed(this.name);
+  }
 }
 //___________Functions for Game Logistics___________//
 //When playerSprite collide with the down door
@@ -570,6 +596,10 @@ function talkBob() {
 	earthText = "Let me be! Climate change is not true. Just let me enjoy my AC!"
 }
 
+function computerCollide() {
+	adventureManager.changeState("ComputerStart");
+}
+
 //______________Subclasses_________________//
 
 class FrontYardBefore extends PNGRoom {
@@ -606,10 +636,11 @@ class FrontYardWatered extends PNGRoom {
 		super.draw();
 		//check if dirty level is greater than 1 and finished water task to show 
 		//the state where houses are underwater due the water level rising. 
-		if (dirtyLevel > 1) {
-			if(goHome){
-				adventureManager.changeState("FrontYardDirtyAfter");
-			}
+		if (homeTask) {
+			clickable[0].visiable = false;
+		}
+		else {
+			clickable[18].visiable = false;
 		}
 	}
 
@@ -737,33 +768,51 @@ class Hallway extends PNGRoom {
 
 		//ending with mom text
 		if (trash == true && water ==true && checkBob == true) {
-			if (dirtyLevel == 0) {
-				talkImage = momImageHappy;
-			}
-			else {
-				talkImage = momImageSad;	
+			homeTask = true;
+			if (neighbor == true){
+				if (dirtyLevel == 0) {
+					talkImage = momImageHappy;
+				}
+				else {
+					talkImage = momImageSad;	
+				}
 			}
 		}
+
 	}
 }
 
 class EarthRoom extends PNGRoom {
 	load() { 
 		super.load();
-		//check is use saw mom's note
-		if (notSeeNote) {
-			earthText = "Time to rise and shine! I wonder if Mom is awake. Let's go to her room";
+		//check if user completed email task
+		if (computerTask == false) {
+			earthText ="Time to rise and shine! Let's jump onto the computer to see if I got any new emails.";
+		}
+		//check is user saw mom's note
+		else if (notSeeNote) {
+			earthText = "I wonder if Mom is awake. Let's go to her room.";
 		}
 		//text if already saw mom's note 
 		else {
 			earthText = "I should always remember to keep myself clean.";
 		}
+		this.computer = createSprite(145,495,170,72);
+		this.computer.addAnimation('computer', loadImage('assets/Computer.png'));
+
 	}
 
 	unload() {
 		super.unload();
 
 		earthText =" ";
+	}
+
+	draw() {
+		super.draw();
+		drawSprite(this.computer); 
+		playerSprite.overlap(this.computer,computerCollide); 
+
 	}
 }
 

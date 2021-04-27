@@ -21,3 +21,13 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 19,FrontYardDirtyAfter,PNGRoom,assets/FrontYardDirtyAfter.png,
 20,FrontYardDirtyBefore,FrontYardBefore,assets/FrontYardDirtyBefore.png,
 21,BackyardRecycle,BackyardRecycle,assets/BackyardRecycle.png,assets/BackyardLandfill_cl.csv
+22,ComputerStart,PNGRoom,assets/ComputerStart.png,
+23,ComputerEmail,PNGRoom,assets/ComputerEmail.png,
+24,ComputerClean,PNGRoom,assets/ComputerClean.png,
+25,Cross,PNGRoom,assets/Cross.png,
+26,Market,PNGRoom,assets/MarketInside.png,
+27,Mr.Beach,PNGRoom,assets/Mr.Beach's.png,
+28,Mr.BeachWater,PNGRoom,assets/Mr.Beach'sWater.png,
+27,Ms.Sweat,PNGRoom,assets/Ms.Sweat's.png,
+28,MarketOutside,PNGRoom,assets/MarketOutside.png,
+29,Outside,PNGRoom,assets/Outside.png,

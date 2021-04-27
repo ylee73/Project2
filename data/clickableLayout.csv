@@ -1,5 +1,5 @@
 ID,Name,State,PNGFilename,Text,x,y,width,height
-0,Home,FrontYardWatered,,Home,1021,609,100,50
+0,Home,FrontYardWatered,,Home,900,609,100,50
 1,Start,Instructions,,Start,539,625,150,60
 2,Instructions,IntroScreen,,Instructions,510,625,200,60
 3,Sprinkler,FrontYardBefore,assets/Sprinkler.png,,891,579,123,123
@@ -17,3 +17,9 @@ ID,Name,State,PNGFilename,Text,x,y,width,height
 15,DownButton,AC,assets/DownButton.png,,866,400,118,80
 16,UpButton,AC,assets/UpButton.png,,240,400,118,80
 17,BackAC,AC,,Back,1021,609,100,50
+18,Outside,FrontYardWatered,,Outside,1051,609,100,50
+19,Email,ComputerStart,assets/email.png,,730,433,70,52
+20,Delete,ComputerEmail,assets/Delete.png,,540,108,20,29
+21,Exit,ComputerClean,,Exit,1021,609,100,50
+22,StoreBag,Ms.Sweat,,Store Bag,900,609,100,50
+23,RecycleBag,Ms.Sweat,assets/bag.png,,1051,579,78,92
