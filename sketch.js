@@ -49,6 +49,7 @@ var homeWIndex =14;
 var downButtonIndex =15; 
 var upButtonIndex =16; 
 var backACIndex =17; 
+var outsideIndex =18;
 var emailIndex =19;
 var deleteIndex =20;
 var exitIndex =21;
@@ -90,6 +91,7 @@ var textDirty2 = false; //check if earth got dirtier and reveal mirror text
 var tempNumb = 68; //initial temp setup 
 var digitalFont; //font for AC task
 var talkImage = null; //check if image is other than main player 
+var visitMrBeach= false; //check if user met Mr.Beach
 
 function preload(){
 	//load adventure manager with states and interacions tables
@@ -406,7 +408,7 @@ clickableButtonPressed = function() {
   	adventureManager.clickablePressed(this.name);
   	//reposition player 
   	playerSprite.position.x = 784;
-	playerSprite.position.y = 404;
+	  playerSprite.position.y = 404;
   }
   else if (this.id ===emailIndex) {
   	//play click sound
@@ -426,7 +428,15 @@ clickableButtonPressed = function() {
   	adventureManager.clickablePressed(this.name);
   	//reposition
   	playerSprite.position.x = 190;
-	playerSprite.position.y = 390;
+	 playerSprite.position.y = 390;
+  }
+  else if (this.id ===outsideIndex) {
+    //play click sound
+    clickSound.play();
+    adventureManager.clickablePressed(this.name);
+    //reposition
+    playerSprite.position.x = 585;
+    playerSprite.position.y = 201;
   }
 }
 //___________Functions for Game Logistics___________//
@@ -603,6 +613,9 @@ function computerCollide() {
 	adventureManager.changeState("ComputerStart");
 }
 
+function houseCollide() {
+  adventureManager.changeState("Hallway");
+}
 //______________Subclasses_________________//
 
 class FrontYardBefore extends PNGRoom {
@@ -634,20 +647,6 @@ class FrontYardBefore extends PNGRoom {
 	}
 }
 
-class FrontYardWatered extends PNGRoom {
-	draw() {
-		super.draw();
-		//check if dirty level is greater than 1 and finished water task to show 
-		//the state where houses are underwater due the water level rising. 
-		if (homeTask) {
-			clickables[0].visiable = false;
-		}
-		else {
-			clickables[18].visiable = false;
-		}
-	}
-
-}
 
 class Kitchen extends PNGRoom {
 	preload() { 
@@ -741,12 +740,11 @@ class Hallway extends PNGRoom {
 	load() {
 		super.load();
 		//check if all the tasks are completed and display text for mom
-		if (trash == true && water ==true && checkBob == true) {
+		if (trash == true && water ==true && checkBob == true && neighor==true) {
 			if (dirtyLevel == 0) {
 				earthText = "Guys I am back~ Earth! Great job with keeping our earth clean! Play again if you want to see different endings."
 			}
 			else {
-				talkImage = momImageSad;
 				earthText = "I am back~ Earth! Why are you so dirty! We have to keep our earth clean! Play again and keep our earth clean."
 			}
 		}
@@ -770,7 +768,7 @@ class Hallway extends PNGRoom {
 		dirtyText();
 
 		//ending with mom text
-		if (trash == true && water ==true && checkBob == true) {
+		if (trash == true && water ==true && checkBob == true && neighor==true) {
 			homeTask = true;
 			if (neighbor == true){
 				if (dirtyLevel == 0) {
@@ -951,12 +949,38 @@ class MirrorClean extends PNGRoom {
   		else if (dirtyLevel ==1 ) {
   			adventureManager.changeState("MirrorDirty1");
   		}
+      else if (dirtyLevel ==2 ) {
+        adventureManager.changeState("MirrorDirty2");
+      }
+      else if (dirtyLevel ==3 ) {
+        adventureManager.changeState("MirrorDirty3");
+      }
   		else {
-  			adventureManager.changeState("MirrorDirty2");
+  			adventureManager.changeState("MirrorDirty4");
   		}
 	}
 }
-
+class Outside extends PNGRoom {
+  load() {
+    super.load();
+    //house sprite
+    this.house = createSprite(550,15,216,151);
+    this.house.addAnimation('house', loadAnimation('assets/House.png'));
+    if (visitMrBeach ==false) {
+      earthText = "Let's visit Mr.Beach!";
+    }
+  }
+  unload() {
+    super.unload();
+    earthText =" ";
+  }
+  draw() {
+    super.draw();
+    //draw house
+    drawSprite(this.house);
+    playerSprite.overlap(this.house,houseCollide);  
+  }
+}
 class Note extends PNGRoom {
 	load() {
 		//check which tasks are done and show appropriate text

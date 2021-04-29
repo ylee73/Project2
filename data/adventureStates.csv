@@ -3,7 +3,7 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 1,FrontYardBefore,FrontYardBefore,assets/FrontYardBefore.png,
 2,FrontYardSprinkler,PNGRoom,assets/FrontYardSprinkler.png,
 3,FrontYardHand,PNGRoom,assets/FrontYardHandSprinkler.png,
-4,FrontYardWatered,FrontYardWatered,assets/FrontYardWatered.png,
+4,FrontYardWatered,PNGRoom,assets/FrontYardWatered.png,
 5,Bob'sRoom,BobRoom,assets/Bob'sRoom.png,assets/Bob'sRoom_cl.csv
 6,Earth'sRoom,EarthRoom,assets/EarthRoom.png,assets/EarthRoom_cl.csv
 7,LivingRoom,LivingRoom,assets/LivingRoom.png,assets/LivingRoom_cl.csv
@@ -26,8 +26,10 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 24,ComputerClean,PNGRoom,assets/ComputerClean.png,
 25,Cross,PNGRoom,assets/Cross.png,
 26,Market,PNGRoom,assets/MarketInside.png,
-27,Mr.Beach,PNGRoom,assets/Mr.Beach's.png,
-28,Mr.BeachWater,PNGRoom,assets/Mr.Beach'sWater.png,
-27,Ms.Sweat,PNGRoom,assets/Ms.Sweat's.png,
+27,Mr.BeachHouse,PNGRoom,assets/Mr.BeachHouse.png,
+28,Mr.BeachHouseWater,PNGRoom,assets/Mr.BeachHouseWater.png,
+27,Ms.SweetHouse,PNGRoom,assets/Ms.SweetHouse.png,
 28,MarketOutside,PNGRoom,assets/MarketOutside.png,
 29,Outside,PNGRoom,assets/Outside.png,
+30,MirrorDirty3,PNGRoom,assets/MirrorDirty3.png,
+31,MirrorDirty4,PNGRoom,assets/MirrorDirty4.png,

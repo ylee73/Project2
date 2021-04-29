@@ -35,11 +35,12 @@ FrontYardDirtyAfter,,,,HomeD,,Hallway
 AC,,,,BackAC,,Bob'sRoom
 Outside,,,,,E,MarketOutside
 Outside,,,,,W,Cross
-Cross,,,,,W,Mr.Beach
+Cross,,,,,W,Mr.BeachHouse
 Cross,,,,,E,Outside
-Cross,,,,,N,Ms.Sweat
-Mr.Beach,,,,,E,Cross
-Mr.BeachWater,,,,,E,Cross
+Cross,,,,,N,Ms.SweetHouse
+Ms.SweetHouse,,,,,S,Cross
+Mr.BeachHouse,,,,,E,Cross
+Mr.BeachHouseWater,,,,,E,Cross
 MarketOutside,,,,,W,Outside
 MarketInside,,,,,W,MarketOutside
 ComputerStart,,,,Email,,ComputerEmail
