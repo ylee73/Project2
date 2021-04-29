@@ -62,6 +62,9 @@ var earthImage;
 var bobImage;
 var momImageHappy;
 var momImageSad;
+var beachImage;
+var sweetImage;
+var shopOwnerImage;
 
 //Sound
 var sprinklerSound = null;
@@ -81,6 +84,7 @@ var trash = false;
 var dirtyLevel = 0;
 var homeTask = false;
 var neighbor = false; 
+var marketTask = false;
 
 //Logistics varaibles
 var notSeeNote = true; //check if user saw mom's note
@@ -615,6 +619,23 @@ function computerCollide() {
 
 function houseCollide() {
   adventureManager.changeState("Hallway");
+  //reposition
+  playerSprite.position.x = 400;
+  playerSprite.position.y = 480;
+}
+function marketCollide() {
+  adventureManager.changeState("MarketInside");
+  //reposition
+  playerSprite.position.x = 60;
+  playerSprite.position.y = 360;
+}
+//Mr.Beach NPC text and image display
+function talkBeach() {
+  //set talkImage to beachImage
+  talkImage =beachImage;
+  //display Mr.Beach's message when collided
+  earthText = "I am worried that my house will be under water. The sea level have been rising continuously.";
+
 }
 //______________Subclasses_________________//
 
@@ -740,7 +761,7 @@ class Hallway extends PNGRoom {
 	load() {
 		super.load();
 		//check if all the tasks are completed and display text for mom
-		if (trash == true && water ==true && checkBob == true && neighor==true) {
+		if (trash == true && water ==true && checkBob == true && neighbor==true) {
 			if (dirtyLevel == 0) {
 				earthText = "Guys I am back~ Earth! Great job with keeping our earth clean! Play again if you want to see different endings."
 			}
@@ -818,18 +839,15 @@ class EarthRoom extends PNGRoom {
 }
 
 class BobRoom extends PNGRoom {
-	preload() { 
-		//creat AC controler sprite for collison
-	  	this.controler = createSprite(800, 533, 84, 15);
-  		this.controler.addAnimation('controler', loadAnimation('assets/Controler.png'));
-
-  		//create Bob NPC sprite
-  		this.bobNPC = createSprite(1066, 310, 44, 132);
-  		this.bobNPC.addAnimation('bob', loadAnimation('assets/bob.png'));
-	}
-
 	load() {
 		super.load()
+     //creat AC controler sprite for collison
+      this.controler = createSprite(800, 533, 84, 15);
+      this.controler.addAnimation('controler', loadAnimation('assets/Controler.png'));
+
+      //create Bob NPC sprite
+      this.bobNPC = createSprite(1066, 310, 44, 132);
+      this.bobNPC.addAnimation('bob', loadAnimation('assets/bob.png'));
 		//check if AC task is completed 
 		if (checkBob == false) {
 			earthText = "Ah it is so cold in here! Let me check the remote next to the AC.";
@@ -881,15 +899,13 @@ class MomRoom extends PNGRoom {
 }
 
 class BackyardRecycle extends PNGRoom {
-	preload() { 
-		//recycle bin sprite for collison
-	  	this.recycle = createSprite(840, 210, 67, 97);
-  		this.recycle.addAnimation('recycle', loadAnimation('assets/Recycle.png'));
-	}
 
 	load() {
 		//superclass 
 		super.load();
+    //recycle bin sprite for collison
+    this.recycle = createSprite(840, 210, 67, 97);
+    this.recycle.addAnimation('recycle', loadAnimation('assets/Recycle.png'));
 		earthText = "Why is our backyard so complicated. But I got to find the recycle bin!";
 	}
 
@@ -909,15 +925,12 @@ class BackyardRecycle extends PNGRoom {
 }
 
 class BackyardLandfill extends PNGRoom {
-	preload() { 
-		//recycle bin sprite for collison
-	  	this.landfill = createSprite(840, 210, 67, 97);
-  		this.landfill.addAnimation('landfill', loadAnimation('assets/Landfill.png'));
-	}
-
 	load() {
 		//superclass 
 		super.load();
+    //recycle bin sprite for collison
+    this.landfill = createSprite(840, 210, 67, 97);
+    this.landfill.addAnimation('landfill', loadAnimation('assets/Landfill.png'));
 		//check is if trash task is completed and load appropriate text
 		earthText = "Why is our backyard so complicated. But I got to find the landfill bin!";
 	}
@@ -964,7 +977,7 @@ class Outside extends PNGRoom {
   load() {
     super.load();
     //house sprite
-    this.house = createSprite(550,15,216,151);
+    this.house = createSprite(610,35,216,151);
     this.house.addAnimation('house', loadAnimation('assets/House.png'));
     if (visitMrBeach ==false) {
       earthText = "Let's visit Mr.Beach!";
@@ -981,6 +994,55 @@ class Outside extends PNGRoom {
     playerSprite.overlap(this.house,houseCollide);  
   }
 }
+
+class MarketOutside extends PNGRoom {
+  load() {
+    super.load();
+    //market sprite 
+    this.market = createSprite(600,305,280,267);
+    this.market.addAnimation('market', loadAnimation('assets/Market.png'));
+    if (marketTask ==false) {
+      earthText = "Let's go inside the market";
+    }
+    else {
+      earthText = "Let's give this back to Ms.Sweet.";
+    }
+  }
+  unload() {
+    super.unload();
+    earthText =" ";
+  }
+  draw() {
+    super.draw();
+    //draw market
+    drawSprite(this.market);
+    playerSprite.overlap(this.market,marketCollide);  
+  }
+}
+
+class MrBeachHouse extends PNGRoom {
+  load() {
+    super.load();
+    //Mr.Beach sprite
+    this.beachNPC = createSprite(490,425,47,121);
+    this.beachNPC.addAnimation('mr.beach', loadAnimation('assets/Mr.Beach.png'));
+
+    //add Mr.Beach image
+    beachImage = loadImage('assets/Mr.beachImage.png');
+  }
+  unload() {
+    super.unload();
+    earthText =" ";
+    talkImage = null;
+  }
+  draw() {
+    super.draw();
+    //draw house
+    drawSprite(this.beachNPC);
+    playerSprite.overlap(this.beachNPC,talkBeach);  
+  }
+}
+
 class Note extends PNGRoom {
 	load() {
 		//check which tasks are done and show appropriate text
