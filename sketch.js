@@ -56,7 +56,7 @@ var exitIndex =21;
 
 //Speaking Textbox + character image
 var textBoxWidth = 645;
-var textBoxHeight = 70;
+var textBoxHeight = 90;
 var earthText = " ";
 var earthImage;
 var bobImage;
@@ -96,6 +96,7 @@ var tempNumb = 68; //initial temp setup
 var digitalFont; //font for AC task
 var talkImage = null; //check if image is other than main player 
 var visitMrBeach= false; //check if user met Mr.Beach
+var visitMsSweet = false; // check if uesr met Ms.Sweet
 
 function preload(){
 	//load adventure manager with states and interacions tables
@@ -448,9 +449,13 @@ clickableButtonPressed = function() {
 function doorCollide() {
 	if (adventureManager.getStateName() == "Kitchen") {
 		adventureManager.changeState("LivingRoom");
+    playerSprite.position.x = 400;
+    playerSprite.position.y = 90;
 	}
 	else if (adventureManager.getStateName() == "LivingRoom") {
 		adventureManager.changeState("Hallway");
+    playerSprite.position.x = 400;
+    playerSprite.position.y = 90;
 	}
 	else if (adventureManager.getStateName() == "Hallway") {
 		//check if water task is done. 
@@ -461,9 +466,14 @@ function doorCollide() {
 		else {
 			adventureManager.changeState("FrontYardBefore");
 		}
+    playerSprite.position.x = 400;
+     playerSprite.position.y = 90;
 	}
-	playerSprite.position.x = 400;
-	playerSprite.position.y = 90;
+  else if (adventureManager.getStateName() == "Ms.SweetHouse") {
+    adventureManager.changeState("Cross");
+    playerSprite.position.x = 580;
+    playerSprite.position.y = 70;
+  }
 }
 
 //when playerSprite collide with the AC controler 
@@ -522,12 +532,19 @@ function drawTalkImage() {
 function doorCollide2() {
 	if (adventureManager.getStateName() == "LivingRoom") {
 		adventureManager.changeState("Kitchen");
+    playerSprite.position.x = 400;
+    playerSprite.position.y = 480;
 	}
 	else if (adventureManager.getStateName() == "Hallway") {
 		adventureManager.changeState("LivingRoom");
+    playerSprite.position.x = 400;
+    playerSprite.position.y = 480;
 	}
-	playerSprite.position.x = 400;
-	playerSprite.position.y = 480;
+  else if (adventureManager.getStateName() == "Cross") {
+    adventureManager.changeState("Ms.SweetHouse");
+    playerSprite.position.x = 580;
+    playerSprite.position.y = 480;
+  }
 }
 
 //move state to Note
@@ -631,11 +648,32 @@ function marketCollide() {
 }
 //Mr.Beach NPC text and image display
 function talkBeach() {
+  //talked to Mr.Beach
+  visitMrBeach = true;
   //set talkImage to beachImage
   talkImage =beachImage;
   //display Mr.Beach's message when collided
   earthText = "I am worried that my house will be under water. The sea level have been rising continuously.";
 
+}
+//Ms.Sweet NPC text and image display
+function talkSweet() {
+  //talked to Ms.Sweet
+  visitMsSweet = true;
+  //set talkImage to beachImage
+  talkImage =sweetImage;
+  //display Ms.Sweet's message when collided
+  if (marketTask == false){
+    //text to introduce market task
+    earthText = "I actually need your help. Can you get me any source of protein from the market? Here is a reusable bag or you can get a plastic bag from the shop.";
+    //show buttons
+    clickables[22].visible = true;
+    clickables[23].visible = true;
+  }
+  else {
+    //when finish market task
+    earthText = "Thank you! I needed this for dinner."
+  }
 }
 //______________Subclasses_________________//
 
@@ -821,12 +859,10 @@ class EarthRoom extends PNGRoom {
 		}
 		this.computer = createSprite(145,495,170,72);
 		this.computer.addAnimation('computer', loadImage('assets/Computer.png'));
-
 	}
 
 	unload() {
 		super.unload();
-
 		earthText =" ";
 	}
 
@@ -977,9 +1013,14 @@ class Outside extends PNGRoom {
   load() {
     super.load();
     //house sprite
-    this.house = createSprite(610,35,216,151);
+    this.house = createSprite(610,50,216,151);
     this.house.addAnimation('house', loadAnimation('assets/House.png'));
-    if (visitMrBeach ==false) {
+    //when user goes out without finishing the home tasks 
+    if (homeTask == false) {
+      earthText = "I think I should go back in to first finish the chores that mom told me to in the house.";
+    }
+    //lead user to visit MrBeach first
+    else if (visitMrBeach ==false) {
       earthText = "Let's visit Mr.Beach!";
     }
   }
@@ -999,7 +1040,7 @@ class MarketOutside extends PNGRoom {
   load() {
     super.load();
     //market sprite 
-    this.market = createSprite(600,305,280,267);
+    this.market = createSprite(700,405,280,267);
     this.market.addAnimation('market', loadAnimation('assets/Market.png'));
     if (marketTask ==false) {
       earthText = "Let's go inside the market";
@@ -1040,6 +1081,62 @@ class MrBeachHouse extends PNGRoom {
     //draw house
     drawSprite(this.beachNPC);
     playerSprite.overlap(this.beachNPC,talkBeach);  
+  }
+}
+
+class MsSweetHouse extends PNGRoom {
+  load() {
+    super.load();
+    //Ms.Sweet sprite
+    this.sweetNPC = createSprite(640,201,47,121);
+    this.sweetNPC.addAnimation('ms.sweet', loadAnimation('assets/Ms.Sweet.png'));
+    //creat transparent door sprite for bottom collison
+    this.door = createSprite(600, 540, 145, 20);
+    this.door.addAnimation('door', loadAnimation('assets/TransparentDoor.png'));
+
+    //add Ms.Sweet image
+    sweetImage = loadImage('assets/Ms.SweetImage.png');
+  }
+  unload() {
+    super.unload();
+    earthText =" ";
+    talkImage = null;
+  }
+  draw() {
+    super.draw();
+    //turn clickables off
+    clickables[22].visible = false;
+    clickables[23].visible = false;
+    //draw house
+    drawSprite(this.sweetNPC);
+    playerSprite.overlap(this.sweetNPC,talkSweet);  
+    //draw door sprite
+    drawSprite(this.door);
+    //check for overlap with door and main character and switch to next state when collided
+    playerSprite.overlap(this.door,doorCollide);
+
+  }
+}
+
+class Cross extends PNGRoom {
+  load() {
+    super.load();
+    if (visitMrBeach == true && visitMsSweet == false) {
+      earthText = "Now let's visit Ms.Sweet if she needs any help.";
+    }
+    //creat transparent door sprite for top collison
+    this.door = createSprite(600, 0, 145, 20);
+    this.door.addAnimation('door', loadAnimation('assets/TransparentDoor.png'));
+  }
+  unload() {
+    super.unload();
+    earthText =" ";
+  }
+  draw() {
+    super.draw();
+    drawSprite(this.door);
+    //check for overlap with door and main character and switch to next state when collided
+    playerSprite.overlap(this.door,doorCollide2);
   }
 }
 
