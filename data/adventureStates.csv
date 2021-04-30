@@ -25,7 +25,7 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 23,ComputerEmail,PNGRoom,assets/ComputerEmail.png,
 24,ComputerClean,PNGRoom,assets/ComputerClean.png,
 25,Cross,Cross,assets/Cross.png,
-26,MarketInside,PNGRoom,assets/MarketInside.png,
+26,MarketInside,MarketInside,assets/MarketInside.png,
 27,Mr.BeachHouse,MrBeachHouse,assets/Mr.BeachHouse.png,
 28,Mr.BeachHouseWater,PNGRoom,assets/Mr.BeachHouseWater.png,
 27,Ms.SweetHouse,MsSweetHouse,assets/Ms.SweetHouse.png,

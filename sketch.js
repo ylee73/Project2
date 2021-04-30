@@ -685,7 +685,7 @@ function talkBeach() {
 function talkSweet() {
   //talked to Ms.Sweet
   visitMsSweet = true;
-  //set talkImage to beachImage
+  //set talkImage to sweetImage
   talkImage =sweetImage;
   //display Ms.Sweet's message when collided
   if (marketTask == false){
@@ -699,6 +699,35 @@ function talkSweet() {
     //when finish market task
     earthText = "Thank you! I needed this for dinner."
   }
+}
+function talkShopOwner() {
+  //set talkImage to ShopOwner
+  talkImage = shopOwnerImage;
+  //display Shop Owner's message when collided
+  if (marketTask){
+    earthText = "No need to pay. I got a call from Ms.Sweet. But did you know that meat actually accounts for around 14.5% of greenhouse gas emission! Just something that I read.";
+  }
+}
+
+function meatCollide() {
+  if (marketTask == false) {
+    //play complete sound
+      completeSound.play();
+    //gets dirtier 
+    dirtyLevel = dirtyLevel +1;  
+  }
+  //market task completed
+  marketTask = true;
+  print(marketTask);
+}
+
+function eggCollide() {
+  if (marketTask == false) {
+    //play complete sound
+      completeSound.play();
+  }
+  //market task completed
+  marketTask = true;
 }
 //______________Subclasses_________________//
 
@@ -1081,7 +1110,7 @@ class MarketOutside extends PNGRoom {
   load() {
     super.load();
     //market sprite 
-    this.market = createSprite(700,405,280,267);
+    this.market = createSprite(700,410,280,267);
     this.market.addAnimation('market', loadAnimation('assets/Market.png'));
     if (marketTask ==false) {
       earthText = "Let's go inside the market";
@@ -1148,7 +1177,7 @@ class MsSweetHouse extends PNGRoom {
     //turn clickables off
     clickables[22].visible = false;
     clickables[23].visible = false;
-    //draw house
+    //draw Ms.Sweet
     drawSprite(this.sweetNPC);
     playerSprite.overlap(this.sweetNPC,talkSweet);  
     //draw door sprite
@@ -1158,12 +1187,14 @@ class MsSweetHouse extends PNGRoom {
 
   }
 }
-
 class Cross extends PNGRoom {
   load() {
     super.load();
     if (visitMrBeach == true && visitMsSweet == false) {
       earthText = "Now let's visit Ms.Sweet if she needs any help.";
+    }
+    else if (visitMs.Sweet) {
+      earthText = "Let's go to the market to get Ms.Sweet some protein.";
     }
     //creat transparent door sprite for top collison
     this.door = createSprite(600, 0, 145, 20);
@@ -1178,6 +1209,46 @@ class Cross extends PNGRoom {
     drawSprite(this.door);
     //check for overlap with door and main character and switch to next state when collided
     playerSprite.overlap(this.door,doorCollide2);
+  }
+}
+class MarketInside extends PNGRoom {
+  load() {
+    super.load();
+    //Shop Owner sprite
+    this.shopOwnerNPC =createSprite(260,80,47,121);
+    this.shopOwnerNPC.addAnimation('shopOwner', loadAnimation('assets/ShopOwner.png'));
+    //meat sprite
+    this.meat = createSprite(600,50,70,70);
+    this.meat.addAnimation('meat',loadAnimation('assets/Meat.png'));
+    //egg sprite
+    this.egg = createSprite(750,50,70,70);
+    this.egg.addAnimation('egg',loadAnimation('assets/Egg.png'));
+
+    shopOwnerImage = loadImage('assets/ShopOwnerImage.png');
+
+    earthText = "I guess I got two choices. Meat or Eggs. I will just choose one out of the two for Ms.Sweet and bring it over to the shop owner."
+  }
+  unload() {
+    super.unload();
+    earthText =" ";
+    talkImage = null;
+  }
+  draw() {
+    super.draw();
+    //draw meat sprite
+    drawSprite(this.meat);
+    //check for overlap with door and main character and switch to next state when collided
+    playerSprite.overlap(this.meat,meatCollide);
+
+    //draw egg sprite
+    drawSprite(this.egg);
+    //check for overlap with door and main character and switch to next state when collided
+    playerSprite.overlap(this.egg,eggCollide);
+
+    //draw shopOwner NPC
+    drawSprite(this.shopOwnerNPC);
+    playerSprite.overlap(this.shopOwnerNPC,talkShopOwner);  
+
   }
 }
 
