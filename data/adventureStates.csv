@@ -3,7 +3,7 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 1,FrontYardBefore,FrontYardBefore,assets/FrontYardBefore.png,
 2,FrontYardSprinkler,PNGRoom,assets/FrontYardSprinkler.png,
 3,FrontYardHand,PNGRoom,assets/FrontYardHandSprinkler.png,
-4,FrontYardWatered,PNGRoom,assets/FrontYardWatered.png,
+4,FrontYardWatered,FrontYardWatered,assets/FrontYardWatered.png,
 5,Bob'sRoom,BobRoom,assets/Bob'sRoom.png,assets/Bob'sRoom_cl.csv
 6,Earth'sRoom,EarthRoom,assets/EarthRoom.png,assets/EarthRoom_cl.csv
 7,LivingRoom,LivingRoom,assets/LivingRoom.png,assets/LivingRoom_cl.csv

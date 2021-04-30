@@ -53,6 +53,8 @@ var outsideIndex =18;
 var emailIndex =19;
 var deleteIndex =20;
 var exitIndex =21;
+var plasticBagIndex =22;
+var recycleBagIndex =23;
 
 //Speaking Textbox + character image
 var textBoxWidth = 645;
@@ -164,6 +166,8 @@ function draw() {
   	adventureManager.getStateName() !== "FrontYardDirtyBefore" &&
   	adventureManager.getStateName() !== "MirrorDirty1" &&
   	adventureManager.getStateName() !== "MirrorDirty2" &&
+    adventureManager.getStateName() !== "MirrorDirty3" &&
+    adventureManager.getStateName() !== "MirrorDirty4" &&
   	adventureManager.getStateName() !== "MirrorClean" &&
   	adventureManager.getStateName() !== "Note" &&
   	adventureManager.getStateName() !== "AC" &&
@@ -289,6 +293,8 @@ clickableButtonPressed = function() {
   	clickSound.play();
 
   	adventureManager.clickablePressed(this.name);
+    //gets dirtier
+    dirtyLevel = dirtyLevel +1;
   	//reposition sprite
   	playerSprite.position.x = 80;
 	playerSprite.position.y = 40;
@@ -443,6 +449,24 @@ clickableButtonPressed = function() {
     playerSprite.position.x = 585;
     playerSprite.position.y = 201;
   }
+  else if (this.id ===plasticBagIndex) {
+    //play click sound
+    clickSound.play();
+    //gets dirtier
+    dirtyLevel = dirtyLevel +1;
+    adventureManager.clickablePressed(this.name);
+    //reposition
+    playerSprite.position.x = 580;
+    playerSprite.position.y = 70;
+  }
+  else if (this.id ===recycleBagIndex) {
+    //play click sound
+    clickSound.play();
+    adventureManager.clickablePressed(this.name);
+    //reposition
+    playerSprite.position.x = 580;
+    playerSprite.position.y = 70;
+  }
 }
 //___________Functions for Game Logistics___________//
 //When playerSprite collide with the down door
@@ -583,8 +607,6 @@ function landfillCollide() {
 	}
 	//trash chore completed
 	trash = true;
-	//gets dirtier
-	dirtyLevel = dirtyLevel +1;
 	//earth text after throwing the trash away 
 	earthText = "Into the Landfill bin it goes. Let's go back to the Kitchen.";
 }
@@ -592,14 +614,17 @@ function landfillCollide() {
 //add green circle to completed tasks
 function checkmark() {
 	if (water) {
-			circle(270,280,25);
+			circle(270,245,25);
 		}
 	if (trash) {
-			circle(270,313,25);
+			circle(270,280,25);
 		}
 	if (checkBob) {
-			circle(270,386,25);
+			circle(270,350,25);
 		}
+  if (neighbor) {
+      circle(270,420,25);
+    }
 }
 
 //AC task in Bob's room 
@@ -827,7 +852,7 @@ class Hallway extends PNGRoom {
 		dirtyText();
 
 		//ending with mom text
-		if (trash == true && water ==true && checkBob == true && neighor==true) {
+		if (trash == true && water ==true && checkBob == true && neighbor==true) {
 			homeTask = true;
 			if (neighbor == true){
 				if (dirtyLevel == 0) {
@@ -986,12 +1011,28 @@ class BackyardLandfill extends PNGRoom {
 		imageCheck();
 	}
 }
+class FrontYardWatered extends PNGRoom {
+  load() {
+    //superclass
+    super.load(); 
+    if (water && trash && checkBob) {
+      earthText = "Let's go outside to see if anyone needs help.";
+    }
+    else {
+      earthText = "Finished watering the yard. Let's go back inside to finish the other chores.";
+    }
+  }
+  unload() {
+    super.unload()
+    earthText = " ";
+  }
+}
 
 class MirrorClean extends PNGRoom {
 	draw () {
 		//check dirty level and change state of the mirror appropriately
 		super.draw();
-
+    print("dirty:"+dirtyLevel);
 		if (dirtyLevel ==0 ) {
   			adventureManager.changeState("MirrorClean");
   		}
@@ -1016,7 +1057,7 @@ class Outside extends PNGRoom {
     this.house = createSprite(610,50,216,151);
     this.house.addAnimation('house', loadAnimation('assets/House.png'));
     //when user goes out without finishing the home tasks 
-    if (homeTask == false) {
+    if (water==false || trash==false || checkBob==false) {
       earthText = "I think I should go back in to first finish the chores that mom told me to in the house.";
     }
     //lead user to visit MrBeach first
@@ -1151,18 +1192,16 @@ class Note extends PNGRoom {
 			earthText = "1 is done. So I guess I can move on to chore number 2."; 
 		}
 		else if (checkBob == false) {
-			earthText = "One more task to do! Hope Bob isn't doing anything bad...";
+			earthText = "Time to go to Bob's room! Hope Bob isn't doing anything bad...";
 		}
 		else {
-			earthText = "Yay! I finished everything. Let's go to the hallway and see if mom is here.";
+			earthText = "Now let's go outside to see if any of our neighbor needs any help.";
 		}
 	}
-
 	unload() {
 		super.unload();
 		earthText =" ";
 	}
-
 	draw() {
 		super.draw();
 		fill (0,128,0);

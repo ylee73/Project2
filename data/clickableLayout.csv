@@ -21,5 +21,5 @@ ID,Name,State,PNGFilename,Text,x,y,width,height
 19,Email,ComputerStart,assets/email.png,,730,433,70,52
 20,Delete,ComputerEmail,assets/Delete.png,,540,100,20,29
 21,Exit,ComputerClean,,Exit,1021,609,100,50
-22,StoreBag,Ms.SweetHouse,,I'm Fine,900,600,100,70
+22,StoreBag,Ms.SweetHouse,,Plastic Bag,900,600,100,70
 23,RecycleBag,Ms.SweetHouse,assets/bag.png,,1051,579,78,92
