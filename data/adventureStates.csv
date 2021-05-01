@@ -27,7 +27,7 @@ ID,StateName,ClassName,PNGFilename,CollisionFilename
 25,Cross,Cross,assets/Cross.png,
 26,MarketInside,MarketInside,assets/MarketInside.png,
 27,Mr.BeachHouse,MrBeachHouse,assets/Mr.BeachHouse.png,
-28,Mr.BeachHouseWater,PNGRoom,assets/Mr.BeachHouseWater.png,
+28,Mr.BeachHouseWater,MrBeachHouse,assets/Mr.BeachHouseWater.png,
 27,Ms.SweetHouse,MsSweetHouse,assets/Ms.SweetHouse.png,
 28,MarketOutside,MarketOutside,assets/MarketOutside.png,
 29,Outside,Outside,assets/Outside.png,s

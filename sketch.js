@@ -87,6 +87,7 @@ var dirtyLevel = 0;
 var homeTask = false;
 var neighbor = false; 
 var marketTask = false;
+var giveBack = false;
 
 //Logistics varaibles
 var notSeeNote = true; //check if user saw mom's note
@@ -99,6 +100,7 @@ var digitalFont; //font for AC task
 var talkImage = null; //check if image is other than main player 
 var visitMrBeach= false; //check if user met Mr.Beach
 var visitMsSweet = false; // check if uesr met Ms.Sweet
+var checkUp = false; //see flooded state 
 
 function preload(){
 	//load adventure manager with states and interacions tables
@@ -108,6 +110,8 @@ function preload(){
 	earthImage = loadImage('assets/EarthText.png');
 	earthImageDirty1 = loadImage('assets/earthImage_dirty1.png');
 	earthImageDirty2 = loadImage('assets/earthImage_dirty2.png');
+  earthImageDirty3 = loadImage('assets/earthImage_dirty3.png');
+  earthImageDirty4 = loadImage('assets/earthImage_dirty4.png');
 	//load map image
 	mapImage = loadImage('assets/Map.png');
 	//load sound
@@ -293,8 +297,6 @@ clickableButtonPressed = function() {
   	clickSound.play();
 
   	adventureManager.clickablePressed(this.name);
-    //gets dirtier
-    dirtyLevel = dirtyLevel +1;
   	//reposition sprite
   	playerSprite.position.x = 80;
 	playerSprite.position.y = 40;
@@ -535,9 +537,17 @@ function imageCheck() {
 		//draw image of earth dirty 1
 		image(earthImageDirty1,73, 570);
 	}
+  else if (dirtyLevel == 2) {
+    //draw image of earth dirty 1
+    image(earthImageDirty2,73, 570);
+  }
+  else if (dirtyLevel == 3) {
+    //draw image of earth dirty 1
+    image(earthImageDirty3,73, 570);
+  }
 	else {
-		//draw image of earth dirty 2
-		image(earthImageDirty2, 73, 570);
+		//draw image of earth dirty 4
+		image(earthImageDirty4, 73, 570);
 	}
 }
 
@@ -603,7 +613,9 @@ function recycleCollide() {
 function landfillCollide() {
 	if (trash == false) {
 		//play complete sound
-  		completeSound.play();
+  	completeSound.play();
+    //gets dirtier
+    dirtyLevel = dirtyLevel +1;
 	}
 	//trash chore completed
 	trash = true;
@@ -622,7 +634,7 @@ function checkmark() {
 	if (checkBob) {
 			circle(270,350,25);
 		}
-  if (neighbor) {
+  if (marketTask) {
       circle(270,420,25);
     }
 }
@@ -678,8 +690,13 @@ function talkBeach() {
   //set talkImage to beachImage
   talkImage =beachImage;
   //display Mr.Beach's message when collided
-  earthText = "I am worried that my house will be under water. The sea level have been rising continuously.";
-
+  if (adventureManager.getStateName() == "Mr.BeachHouseWater") {
+    //text if state is under water
+    earthText = "My house! It is underwater... What am I going to do now."
+  }
+  else {
+    earthText = "I am worried that my house will be under water. The sea level have been rising continuously.";
+  }
 }
 //Ms.Sweet NPC text and image display
 function talkSweet() {
@@ -698,6 +715,8 @@ function talkSweet() {
   else {
     //when finish market task
     earthText = "Thank you! I needed this for dinner."
+    giveBack = true; 
+    print ('giveback' + giveBack);
   }
 }
 function talkShopOwner() {
@@ -728,6 +747,13 @@ function eggCollide() {
   }
   //market task completed
   marketTask = true;
+}
+//door to go outside the market
+function marketDoorCollide() {
+  adventureManager.changeState("MarketOutside");
+  //reposition
+  playerSprite.position.x = 500;
+  playerSprite.position.y = 500;
 }
 //______________Subclasses_________________//
 
@@ -837,35 +863,33 @@ class LivingRoom extends PNGRoom {
 }
 
 class Hallway extends PNGRoom {
-	preload() { 
-		//creat door sprite for collison
-	  	this.door = createSprite(440, 540, 240, 20);
-  		this.door.addAnimation('door', loadAnimation('assets/Door.png'));
-  		//create door spirte for top door collison
-  		this.door2 = createSprite(440, 0, 240, 20);
-  		this.door2.addAnimation('door', loadAnimation('assets/Door.png'));
-
-  		//add Mom image 
-		momImageHappy = loadImage('assets/momHappy.png');
-		momImageSad = loadImage('assets/momSad.png');
-	}
-
 	load() {
 		super.load();
-		//check if all the tasks are completed and display text for mom
-		if (trash == true && water ==true && checkBob == true && neighbor==true) {
-			if (dirtyLevel == 0) {
-				earthText = "Guys I am back~ Earth! Great job with keeping our earth clean! Play again if you want to see different endings."
-			}
-			else {
-				earthText = "I am back~ Earth! Why are you so dirty! We have to keep our earth clean! Play again and keep our earth clean."
-			}
+    //creat door sprite for collison
+    this.door = createSprite(440, 540, 240, 20);
+    this.door.addAnimation('door', loadAnimation('assets/Door.png'));
+    //create door spirte for top door collison
+    this.door2 = createSprite(440, 0, 240, 20);
+    this.door2.addAnimation('door', loadAnimation('assets/Door.png'));
+
+    //add Mom image 
+    momImageHappy = loadImage('assets/momHappy.png');
+    momImageSad = loadImage('assets/momSad.png');
+		//check if all the home tasks are completed
+		if (trash == true && water ==true && checkBob == true && giveBack == true) {
+        if (dirtyLevel == 0) {
+          earthText = "Guys I am back~ Earth! Great job with keeping our earth clean! Play again if you want to see different endings."
+        }
+        else {
+          earthText = "I am back~ Earth! Why are you so dirty! We have to keep our earth clean! Play again and keep our earth clean."
+        }
 		}
 	}
 
 	unload() {
 		super.unload();
 		earthText =" ";
+    talkImage == null;
 	}
 
 	draw() {
@@ -881,9 +905,9 @@ class Hallway extends PNGRoom {
 		dirtyText();
 
 		//ending with mom text
-		if (trash == true && water ==true && checkBob == true && neighbor==true) {
+		if (trash == true && water ==true && checkBob == true) {
 			homeTask = true;
-			if (neighbor == true){
+			if (giveBack == true){
 				if (dirtyLevel == 0) {
 					talkImage = momImageHappy;
 				}
@@ -1110,7 +1134,7 @@ class MarketOutside extends PNGRoom {
   load() {
     super.load();
     //market sprite 
-    this.market = createSprite(700,410,280,267);
+    this.market = createSprite(700,420,280,267);
     this.market.addAnimation('market', loadAnimation('assets/Market.png'));
     if (marketTask ==false) {
       earthText = "Let's go inside the market";
@@ -1135,7 +1159,7 @@ class MrBeachHouse extends PNGRoom {
   load() {
     super.load();
     //Mr.Beach sprite
-    this.beachNPC = createSprite(490,425,47,121);
+    this.beachNPC = createSprite(700,425,47,121);
     this.beachNPC.addAnimation('mr.beach', loadAnimation('assets/Mr.Beach.png'));
 
     //add Mr.Beach image
@@ -1148,9 +1172,15 @@ class MrBeachHouse extends PNGRoom {
   }
   draw() {
     super.draw();
-    //draw house
+    print("DL" + dirtyLevel);
+    if (giveBack == true && dirtyLevel == 4) {
+      adventureManager.changeState("Mr.BeachHouseWater");
+      earthText = "Oh no! Mr.Beach's house is underwater because of the rising sea level.";
+      checkUp = true;
+    }
+    //draw NPC
     drawSprite(this.beachNPC);
-    playerSprite.overlap(this.beachNPC,talkBeach);  
+    playerSprite.overlap(this.beachNPC,talkBeach); 
   }
 }
 
@@ -1190,12 +1220,20 @@ class MsSweetHouse extends PNGRoom {
 class Cross extends PNGRoom {
   load() {
     super.load();
+    //after visiting Mr.Beach, accept task from Ms.Sweet 
     if (visitMrBeach == true && visitMsSweet == false) {
       earthText = "Now let's visit Ms.Sweet if she needs any help.";
     }
-    else if (visitMs.Sweet) {
+    else if (checkUp == true) {
+      earthText = "I feel bad for Mr.Beach. I should have kept myself clean. I think I should go home now.";
+    }
+    else if (giveBack==true && dirtyLevel == 4) {
+      earthText = "I feel really dirty and feel as if I lost some land... Let's check up on Mr.Beach once more to see if he is fine."
+    }
+    else if (marketTask == false && visitMsSweet == true) {
       earthText = "Let's go to the market to get Ms.Sweet some protein.";
     }
+
     //creat transparent door sprite for top collison
     this.door = createSprite(600, 0, 145, 20);
     this.door.addAnimation('door', loadAnimation('assets/TransparentDoor.png'));
@@ -1215,7 +1253,7 @@ class MarketInside extends PNGRoom {
   load() {
     super.load();
     //Shop Owner sprite
-    this.shopOwnerNPC =createSprite(260,80,47,121);
+    this.shopOwnerNPC =createSprite(260,95,47,121);
     this.shopOwnerNPC.addAnimation('shopOwner', loadAnimation('assets/ShopOwner.png'));
     //meat sprite
     this.meat = createSprite(600,50,70,70);
@@ -1223,6 +1261,9 @@ class MarketInside extends PNGRoom {
     //egg sprite
     this.egg = createSprite(750,50,70,70);
     this.egg.addAnimation('egg',loadAnimation('assets/Egg.png'));
+    //market door sprite
+    this.marketDoor = createSprite(20,190,16,145);
+    this.marketDoor.addAnimation('marketDoor',loadAnimation('assets/MarketDoor.png'));
 
     shopOwnerImage = loadImage('assets/ShopOwnerImage.png');
 
@@ -1249,6 +1290,9 @@ class MarketInside extends PNGRoom {
     drawSprite(this.shopOwnerNPC);
     playerSprite.overlap(this.shopOwnerNPC,talkShopOwner);  
 
+    //draw market door
+    drawSprite(this.marketDoor);
+    playerSprite.overlap(this.marketDoor,marketDoorCollide);  
   }
 }
 
