@@ -4,13 +4,18 @@
 
  This is the files using p5.play.js and p5.2DAdventure.js libraries to create a 
  social justice game revolved around the topic of global warming and saving the environment. 
- The game is a RPF style game where the main character, Earth, has to complete the chores 
+ The game is a RPG style game where the main character, Earth, has to complete the chores 
  that his mom left him while keeping the earth clean. The user will navigate the house 
  using the arrow keyboards and use clickable buttons to select the best method to complete 
  the tasks. Every time the user chooses the non-environmentally friendly option, there will be 
  a signal that global warming is negatively affecting the environment and the main character 
  will get dirtier. 
 
+Update: 
+New computer interaction where Earth deletes his junk emails to free up some 
+memory to lower carbon emission. 
+New outside map with neighbors and market. 
+New outside taks to checkup on neighobors and help them out if they need any help. 
 ------------------------------------------------------------------------------------
 	To use:
 	Add this line to the index.html
@@ -876,22 +881,28 @@ class Hallway extends PNGRoom {
     momImageHappy = loadImage('assets/momHappy.png');
     momImageSad = loadImage('assets/momSad.png');
 		//check if all the home tasks are completed
-		if (trash == true && water ==true && checkBob == true && giveBack == true) {
+		if (trash == true && water ==true && checkBob == true ) {
+      //when all the tasks are finsihed
+      if (giveBack == true) {
         if (dirtyLevel == 0) {
           earthText = "Guys I am back~ Earth! Great job with keeping our earth clean! Play again if you want to see different endings."
         }
+        //when earth is dirty 
         else {
           earthText = "I am back~ Earth! Why are you so dirty! We have to keep our earth clean! Play again and keep our earth clean."
         }
+      }
+      //if finish all the home tasks
+      else {
+        earthText = "I think I am done with all the tasks within the house. I guess I should go out and see if any of my neighbors need my help."
+      }
 		}
 	}
-
 	unload() {
 		super.unload();
 		earthText =" ";
     talkImage == null;
 	}
-
 	draw() {
 		super.draw();
 		//draw door sprite
@@ -1107,11 +1118,11 @@ class Outside extends PNGRoom {
   load() {
     super.load();
     //house sprite
-    this.house = createSprite(610,50,216,151);
+    this.house = createSprite(610,65,216,151);
     this.house.addAnimation('house', loadAnimation('assets/House.png'));
     //when user goes out without finishing the home tasks 
     if (water==false || trash==false || checkBob==false) {
-      earthText = "I think I should go back in to first finish the chores that mom told me to in the house.";
+      earthText = "I think I should go back in to first finish the chores that mom told me to do in the house.";
     }
     //lead user to visit MrBeach first
     else if (visitMrBeach ==false) {
@@ -1172,7 +1183,7 @@ class MrBeachHouse extends PNGRoom {
   }
   draw() {
     super.draw();
-    print("DL" + dirtyLevel);
+    //check if state should change to the Watered state
     if (giveBack == true && dirtyLevel == 4) {
       adventureManager.changeState("Mr.BeachHouseWater");
       earthText = "Oh no! Mr.Beach's house is underwater because of the rising sea level.";
@@ -1224,12 +1235,19 @@ class Cross extends PNGRoom {
     if (visitMrBeach == true && visitMsSweet == false) {
       earthText = "Now let's visit Ms.Sweet if she needs any help.";
     }
+    //after comeing out of the Mr.BeachHouseWatered state
     else if (checkUp == true) {
       earthText = "I feel bad for Mr.Beach. I should have kept myself clean. I think I should go home now.";
     }
+    //lead user to Mr.BeachHouseWatered state
     else if (giveBack==true && dirtyLevel == 4) {
       earthText = "I feel really dirty and feel as if I lost some land... Let's check up on Mr.Beach once more to see if he is fine."
     }
+    // go home for ending
+    else if (giveBack == true && dirtyLevel<4) {
+      earthText = "I think I am done with helping everyone. I should go home now and wait for mom to come back.";
+    }
+    // go to market to finish task
     else if (marketTask == false && visitMsSweet == true) {
       earthText = "Let's go to the market to get Ms.Sweet some protein.";
     }
@@ -1262,7 +1280,7 @@ class MarketInside extends PNGRoom {
     this.egg = createSprite(750,50,70,70);
     this.egg.addAnimation('egg',loadAnimation('assets/Egg.png'));
     //market door sprite
-    this.marketDoor = createSprite(20,190,16,145);
+    this.marketDoor = createSprite(20,205,16,145);
     this.marketDoor.addAnimation('marketDoor',loadAnimation('assets/MarketDoor.png'));
 
     shopOwnerImage = loadImage('assets/ShopOwnerImage.png');

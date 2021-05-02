@@ -3,7 +3,12 @@
 
 
 ### Overview
-This is the files using p5.play.js and p5.2DAdventure.js libraries to create a social justice game revolved around the topic of global warming and saving the environment. The game is a RPF style game where the main character, Earth, has to complete the chores that his mom left him while keeping the earth clean. The user will navigate the house using the arrow keyboards and use clickable buttons to select the best method to complete the tasks. Every time the user chooses the non-environmentally friendly option, there will be a signal that global warming is negatively affecting the environment and the main character will get dirtier. 
+This is the files using p5.play.js and p5.2DAdventure.js libraries to create a social justice game revolved around the topic of global warming and saving the environment. The game is a RPG style game where the main character, Earth, has to complete the chores that his mom left him while keeping the earth clean. The user will navigate using the arrow keyboards and use clickable buttons to select the best method to complete the tasks. Every time the user chooses the non-environmentally friendly option, there will be a signal that global warming is negatively affecting the environment and the main character will get dirtier.
+
+Update: 
+New computer interaction where Earth deletes his junk emails to free up some memory to lower carbon emission. 
+New outside map with neighbors and market. 
+New outside taks to checkup on neighobors and help them out if they need any help.  
 
 
 ### Technical Details
