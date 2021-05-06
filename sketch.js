@@ -230,25 +230,25 @@ function moveSprite() {
 		playerSprite.changeAnimation('walk');
 		//flip to go right
 		playerSprite.mirrorX(1);
-		playerSprite.velocity.x = 4;
+		playerSprite.velocity.x = 6;
 	}
-	//walk to the left
+	//walk to the leftx
 	else if(keyIsDown(LEFT_ARROW)) {
 		playerSprite.changeAnimation('walk');
 		//flip to go left
 		playerSprite.mirrorX(-1);
-		playerSprite.velocity.x = -4;
+		playerSprite.velocity.x = -6;
 	}
 	//move up and down
 	//going down
 	else if(keyIsDown(DOWN_ARROW)) {
 		playerSprite.changeAnimation('upDown');
-		playerSprite.velocity.y = 4;
+		playerSprite.velocity.y = 6;
 	}
 	//walk to the left
 	else if(keyIsDown(UP_ARROW)) {
 		playerSprite.changeAnimation('upDown');
-		playerSprite.velocity.y = -4;
+		playerSprite.velocity.y = -6;
 	}
 	else {
 		playerSprite.changeAnimation('still');
@@ -700,7 +700,7 @@ function talkBeach() {
     earthText = "My house! It is underwater... What am I going to do now."
   }
   else {
-    earthText = "I am worried that my house will be under water. The sea level have been rising continuously.";
+    earthText = "I am worried that my house will be under water. The sea level have been rising continuously. I may look like Bob with a hat and mustache, but I am not Bob.";
   }
 }
 //Ms.Sweet NPC text and image display
@@ -913,7 +913,9 @@ class Hallway extends PNGRoom {
 		playerSprite.overlap(this.door,doorCollide);
 		playerSprite.overlap(this.door2,doorCollide2);
 		//reveal dirty text when earth gets dirtier
-		dirtyText();
+    if (trash ==false || water ==false ||checkBob ==false || giveBack ==false) {
+      dirtyText();
+    }
 
 		//ending with mom text
 		if (trash == true && water ==true && checkBob == true) {
@@ -1126,7 +1128,7 @@ class Outside extends PNGRoom {
     }
     //lead user to visit MrBeach first
     else if (visitMrBeach ==false) {
-      earthText = "Let's visit Mr.Beach!";
+      earthText = "Let's visit Mr.Beach! Now that I think about it Mr.Beach kinda looks like Bob with a hat and a mustache. hmmmmm";
     }
   }
   unload() {
@@ -1249,7 +1251,7 @@ class Cross extends PNGRoom {
     }
     // go to market to finish task
     else if (marketTask == false && visitMsSweet == true) {
-      earthText = "Let's go to the market to get Ms.Sweet some protein.";
+      earthText = "Let's go to the market to get Ms.Sweet some protein. But now that I think about it she too kinda looks like Bob.";
     }
 
     //creat transparent door sprite for top collison
@@ -1280,12 +1282,12 @@ class MarketInside extends PNGRoom {
     this.egg = createSprite(750,50,70,70);
     this.egg.addAnimation('egg',loadAnimation('assets/Egg.png'));
     //market door sprite
-    this.marketDoor = createSprite(20,205,16,145);
+    this.marketDoor = createSprite(20,220,16,145);
     this.marketDoor.addAnimation('marketDoor',loadAnimation('assets/MarketDoor.png'));
 
     shopOwnerImage = loadImage('assets/ShopOwnerImage.png');
 
-    earthText = "I guess I got two choices. Meat or Eggs. I will just choose one out of the two for Ms.Sweet and bring it over to the shop owner."
+    earthText = "I guess I can choose between Meat or Eggs and bring it over to the shop owner. But the shop owner kinda looks like Mr.Beach. Everyone here kinda looks alike."
   }
   unload() {
     super.unload();
