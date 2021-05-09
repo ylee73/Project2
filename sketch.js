@@ -194,7 +194,7 @@ function draw() {
 	fill(255);
 	textSize(25);
 
-  	//earth text 
+  //earth text 
  	text(earthText, 268, 590, textBoxWidth, textBoxHeight);
 
  	//no image of speaker in intro and instructions state
@@ -232,7 +232,7 @@ function moveSprite() {
 		playerSprite.mirrorX(1);
 		playerSprite.velocity.x = 6;
 	}
-	//walk to the leftx
+	//walk to the left
 	else if(keyIsDown(LEFT_ARROW)) {
 		playerSprite.changeAnimation('walk');
 		//flip to go left
@@ -250,6 +250,7 @@ function moveSprite() {
 		playerSprite.changeAnimation('upDown');
 		playerSprite.velocity.y = -6;
 	}
+  //stay still
 	else {
 		playerSprite.changeAnimation('still');
 		playerSprite.velocity.x = 0; 
