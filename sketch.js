@@ -890,7 +890,7 @@ class Hallway extends PNGRoom {
         }
         //when earth is dirty 
         else {
-          earthText = "I am back~ Earth! Why are you so dirty! We have to keep our earth clean! Play again and keep our earth clean."
+          earthText = "I am back~ Earth! Why are you so dirty! Go look at yourself in the mirror and reflect on your actions. Play again and keep our earth clean."
         }
       }
       //if finish all the home tasks
